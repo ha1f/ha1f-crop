@@ -1,0 +1,449 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 48;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		56275AF31F750F57005D9C3E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56275AF21F750F57005D9C3E /* AppDelegate.swift */; };
+		56275AF51F750F57005D9C3E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56275AF41F750F57005D9C3E /* ViewController.swift */; };
+		56275AF81F750F57005D9C3E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 56275AF61F750F57005D9C3E /* Main.storyboard */; };
+		56275AFA1F750F57005D9C3E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 56275AF91F750F57005D9C3E /* Assets.xcassets */; };
+		56275AFD1F750F57005D9C3E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 56275AFB1F750F57005D9C3E /* LaunchScreen.storyboard */; };
+		56275B081F750F57005D9C3E /* ha1f_cropTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56275B071F750F57005D9C3E /* ha1f_cropTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		56275B041F750F57005D9C3E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 56275AE71F750F57005D9C3E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 56275AEE1F750F57005D9C3E;
+			remoteInfo = "ha1f-crop";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		56275AEF1F750F57005D9C3E /* ha1f-crop.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ha1f-crop.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		56275AF21F750F57005D9C3E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		56275AF41F750F57005D9C3E /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		56275AF71F750F57005D9C3E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		56275AF91F750F57005D9C3E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		56275AFC1F750F57005D9C3E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		56275AFE1F750F57005D9C3E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		56275B031F750F57005D9C3E /* ha1f-cropTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ha1f-cropTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		56275B071F750F57005D9C3E /* ha1f_cropTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ha1f_cropTests.swift; sourceTree = "<group>"; };
+		56275B091F750F57005D9C3E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		56275AEC1F750F57005D9C3E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		56275B001F750F57005D9C3E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		56275AE61F750F57005D9C3E = {
+			isa = PBXGroup;
+			children = (
+				56275AF11F750F57005D9C3E /* ha1f-crop */,
+				56275B061F750F57005D9C3E /* ha1f-cropTests */,
+				56275AF01F750F57005D9C3E /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		56275AF01F750F57005D9C3E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				56275AEF1F750F57005D9C3E /* ha1f-crop.app */,
+				56275B031F750F57005D9C3E /* ha1f-cropTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		56275AF11F750F57005D9C3E /* ha1f-crop */ = {
+			isa = PBXGroup;
+			children = (
+				56275AF21F750F57005D9C3E /* AppDelegate.swift */,
+				56275AF41F750F57005D9C3E /* ViewController.swift */,
+				56275AF61F750F57005D9C3E /* Main.storyboard */,
+				56275AF91F750F57005D9C3E /* Assets.xcassets */,
+				56275AFB1F750F57005D9C3E /* LaunchScreen.storyboard */,
+				56275AFE1F750F57005D9C3E /* Info.plist */,
+			);
+			path = "ha1f-crop";
+			sourceTree = "<group>";
+		};
+		56275B061F750F57005D9C3E /* ha1f-cropTests */ = {
+			isa = PBXGroup;
+			children = (
+				56275B071F750F57005D9C3E /* ha1f_cropTests.swift */,
+				56275B091F750F57005D9C3E /* Info.plist */,
+			);
+			path = "ha1f-cropTests";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		56275AEE1F750F57005D9C3E /* ha1f-crop */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 56275B0C1F750F57005D9C3E /* Build configuration list for PBXNativeTarget "ha1f-crop" */;
+			buildPhases = (
+				56275AEB1F750F57005D9C3E /* Sources */,
+				56275AEC1F750F57005D9C3E /* Frameworks */,
+				56275AED1F750F57005D9C3E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "ha1f-crop";
+			productName = "ha1f-crop";
+			productReference = 56275AEF1F750F57005D9C3E /* ha1f-crop.app */;
+			productType = "com.apple.product-type.application";
+		};
+		56275B021F750F57005D9C3E /* ha1f-cropTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 56275B0F1F750F57005D9C3E /* Build configuration list for PBXNativeTarget "ha1f-cropTests" */;
+			buildPhases = (
+				56275AFF1F750F57005D9C3E /* Sources */,
+				56275B001F750F57005D9C3E /* Frameworks */,
+				56275B011F750F57005D9C3E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				56275B051F750F57005D9C3E /* PBXTargetDependency */,
+			);
+			name = "ha1f-cropTests";
+			productName = "ha1f-cropTests";
+			productReference = 56275B031F750F57005D9C3E /* ha1f-cropTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		56275AE71F750F57005D9C3E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0900;
+				LastUpgradeCheck = 0900;
+				ORGANIZATIONNAME = ha1f;
+				TargetAttributes = {
+					56275AEE1F750F57005D9C3E = {
+						CreatedOnToolsVersion = 9.0;
+						ProvisioningStyle = Automatic;
+					};
+					56275B021F750F57005D9C3E = {
+						CreatedOnToolsVersion = 9.0;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 56275AEE1F750F57005D9C3E;
+					};
+				};
+			};
+			buildConfigurationList = 56275AEA1F750F57005D9C3E /* Build configuration list for PBXProject "ha1f-crop" */;
+			compatibilityVersion = "Xcode 8.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 56275AE61F750F57005D9C3E;
+			productRefGroup = 56275AF01F750F57005D9C3E /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				56275AEE1F750F57005D9C3E /* ha1f-crop */,
+				56275B021F750F57005D9C3E /* ha1f-cropTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		56275AED1F750F57005D9C3E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				56275AFD1F750F57005D9C3E /* LaunchScreen.storyboard in Resources */,
+				56275AFA1F750F57005D9C3E /* Assets.xcassets in Resources */,
+				56275AF81F750F57005D9C3E /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		56275B011F750F57005D9C3E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		56275AEB1F750F57005D9C3E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				56275AF51F750F57005D9C3E /* ViewController.swift in Sources */,
+				56275AF31F750F57005D9C3E /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		56275AFF1F750F57005D9C3E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				56275B081F750F57005D9C3E /* ha1f_cropTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		56275B051F750F57005D9C3E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 56275AEE1F750F57005D9C3E /* ha1f-crop */;
+			targetProxy = 56275B041F750F57005D9C3E /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		56275AF61F750F57005D9C3E /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				56275AF71F750F57005D9C3E /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		56275AFB1F750F57005D9C3E /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				56275AFC1F750F57005D9C3E /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		56275B0A1F750F57005D9C3E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		56275B0B1F750F57005D9C3E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		56275B0D1F750F57005D9C3E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = V723YSJ67H;
+				INFOPLIST_FILE = "ha1f-crop/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "net.ha1f.ha1f-crop";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		56275B0E1F750F57005D9C3E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = V723YSJ67H;
+				INFOPLIST_FILE = "ha1f-crop/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "net.ha1f.ha1f-crop";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		56275B101F750F57005D9C3E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = V723YSJ67H;
+				INFOPLIST_FILE = "ha1f-cropTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "net.ha1f.ha1f-cropTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ha1f-crop.app/ha1f-crop";
+			};
+			name = Debug;
+		};
+		56275B111F750F57005D9C3E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = V723YSJ67H;
+				INFOPLIST_FILE = "ha1f-cropTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "net.ha1f.ha1f-cropTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ha1f-crop.app/ha1f-crop";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		56275AEA1F750F57005D9C3E /* Build configuration list for PBXProject "ha1f-crop" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				56275B0A1F750F57005D9C3E /* Debug */,
+				56275B0B1F750F57005D9C3E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		56275B0C1F750F57005D9C3E /* Build configuration list for PBXNativeTarget "ha1f-crop" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				56275B0D1F750F57005D9C3E /* Debug */,
+				56275B0E1F750F57005D9C3E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		56275B0F1F750F57005D9C3E /* Build configuration list for PBXNativeTarget "ha1f-cropTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				56275B101F750F57005D9C3E /* Debug */,
+				56275B111F750F57005D9C3E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 56275AE71F750F57005D9C3E /* Project object */;
+}
