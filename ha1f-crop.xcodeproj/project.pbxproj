@@ -13,6 +13,8 @@
 		56275AFA1F750F57005D9C3E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 56275AF91F750F57005D9C3E /* Assets.xcassets */; };
 		56275AFD1F750F57005D9C3E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 56275AFB1F750F57005D9C3E /* LaunchScreen.storyboard */; };
 		56275B081F750F57005D9C3E /* ha1f_cropTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56275B071F750F57005D9C3E /* ha1f_cropTests.swift */; };
+		56275B141F78A75E005D9C3E /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56275B131F78A75E005D9C3E /* UIImage+Extension.swift */; };
+		56275B151F78C81F005D9C3E /* sample.png in Resources */ = {isa = PBXBuildFile; fileRef = 56275B121F78A181005D9C3E /* sample.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +38,8 @@
 		56275B031F750F57005D9C3E /* ha1f-cropTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ha1f-cropTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		56275B071F750F57005D9C3E /* ha1f_cropTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ha1f_cropTests.swift; sourceTree = "<group>"; };
 		56275B091F750F57005D9C3E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		56275B121F78A181005D9C3E /* sample.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sample.png; sourceTree = "<group>"; };
+		56275B131F78A75E005D9C3E /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,12 +81,14 @@
 		56275AF11F750F57005D9C3E /* ha1f-crop */ = {
 			isa = PBXGroup;
 			children = (
+				56275B121F78A181005D9C3E /* sample.png */,
 				56275AF21F750F57005D9C3E /* AppDelegate.swift */,
 				56275AF41F750F57005D9C3E /* ViewController.swift */,
 				56275AF61F750F57005D9C3E /* Main.storyboard */,
 				56275AF91F750F57005D9C3E /* Assets.xcassets */,
 				56275AFB1F750F57005D9C3E /* LaunchScreen.storyboard */,
 				56275AFE1F750F57005D9C3E /* Info.plist */,
+				56275B131F78A75E005D9C3E /* UIImage+Extension.swift */,
 			);
 			path = "ha1f-crop";
 			sourceTree = "<group>";
@@ -179,6 +185,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				56275B151F78C81F005D9C3E /* sample.png in Resources */,
 				56275AFD1F750F57005D9C3E /* LaunchScreen.storyboard in Resources */,
 				56275AFA1F750F57005D9C3E /* Assets.xcassets in Resources */,
 				56275AF81F750F57005D9C3E /* Main.storyboard in Resources */,
@@ -199,6 +206,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				56275B141F78A75E005D9C3E /* UIImage+Extension.swift in Sources */,
 				56275AF51F750F57005D9C3E /* ViewController.swift in Sources */,
 				56275AF31F750F57005D9C3E /* AppDelegate.swift in Sources */,
 			);
