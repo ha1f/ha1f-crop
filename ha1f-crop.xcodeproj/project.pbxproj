@@ -82,13 +82,13 @@
 			isa = PBXGroup;
 			children = (
 				56275B121F78A181005D9C3E /* sample.png */,
+				56275B131F78A75E005D9C3E /* UIImage+Extension.swift */,
 				56275AF21F750F57005D9C3E /* AppDelegate.swift */,
 				56275AF41F750F57005D9C3E /* ViewController.swift */,
 				56275AF61F750F57005D9C3E /* Main.storyboard */,
 				56275AF91F750F57005D9C3E /* Assets.xcassets */,
 				56275AFB1F750F57005D9C3E /* LaunchScreen.storyboard */,
 				56275AFE1F750F57005D9C3E /* Info.plist */,
-				56275B131F78A75E005D9C3E /* UIImage+Extension.swift */,
 			);
 			path = "ha1f-crop";
 			sourceTree = "<group>";
