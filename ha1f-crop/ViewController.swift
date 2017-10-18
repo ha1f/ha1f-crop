@@ -18,41 +18,18 @@ class ViewController: UIViewController {
         return imageView
     }()
     
-    // TODO: refactor to holeView, dimViw to single view to make consistent
-    private lazy var holeView: GridView = {
-        let view = GridView()
-        view.isUserInteractionEnabled = false
-        return view
-    }()
-    
-    private lazy var holedDimView: HoledView = {
-        let holedDimView = HoledView(frame: self.view.bounds)
-        holedDimView.backgroundColor = UIColor(displayP3Red: 0, green: 0, blue: 0, alpha: 0.5)
-        return holedDimView
-    }()
-    
-    var holeFrame: CGRect {
-        set {
-            holedDimView.holeFrame = newValue
-            holeView.frame = newValue
-        }
-        get {
-            return holedDimView.holeFrame
-        }
-    }
-
+    private lazy var croppingView = CroppingView(frame: self.view.bounds)
 
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
         
         view.addSubview(imageView)
-        view.addSubview(holedDimView)
-        view.addSubview(holeView)
+        view.addSubview(croppingView)
         
         let width: CGFloat = 300
-        holeFrame = CGRect(x: (holedDimView.bounds.width - width) / 2,
-                           y: (holedDimView.bounds.height - width) / 2,
+        croppingView.holeFrame = CGRect(x: (croppingView.bounds.width - width) / 2,
+                           y: (croppingView.bounds.height - width) / 2,
                            width: width,
                            height: width)
     }

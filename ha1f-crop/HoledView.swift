@@ -8,38 +8,39 @@
 
 import UIKit
 
-extension CGPoint {
-    func offsetBy(dx: CGFloat, dy: CGFloat) -> CGPoint {
-        return CGPoint(x: x + dx, y: y + dy)
-    }
-}
-
-extension CGRect {
-    func withMovingTopY(to value: CGFloat) -> CGRect {
-        return CGRect(x: minX, y: min(value, maxY), width: width, height: abs(maxY - value))
-    }
-    func withMovingBottomY(to value: CGFloat) -> CGRect {
-        return CGRect(x: minX, y: min(minY, value), width: width, height: abs(value - minY))
-    }
-    func withMovingLeftX(to value: CGFloat) -> CGRect {
-        return CGRect(x: min(value, maxX), y: minY, width: abs(maxX - value), height: height)
-    }
-    func withMovingRightX(to value: CGFloat) -> CGRect {
-        return CGRect(x: min(minX, value), y: minY, width: abs(value - minX), height: height)
+class CroppingView: UIView {
+    private lazy var holedView = HoledView(frame: self.bounds)
+    private lazy var holeView = GridView(frame: self.holeFrame)
+    
+    var holeFrame: CGRect = CGRect.zero {
+        didSet {
+            self.holedView.holeFrame = holeFrame
+            self.setNeedsLayout()
+        }
     }
     
-    // TODO: refactor to single call
-    func withMovingTopLeft(to value: CGPoint) -> CGRect {
-        return withMovingLeftX(to: value.x).withMovingTopY(to: value.y)
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        self.holedView.frame = self.bounds
+        self.holeView.frame = self.holeFrame
     }
-    func withMovingTopRight(to value: CGPoint) -> CGRect {
-        return withMovingRightX(to: value.x).withMovingTopY(to: value.y)
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        setup()
     }
-    func withMovingBottomLeft(to value: CGPoint) -> CGRect {
-        return withMovingLeftX(to: value.x).withMovingBottomY(to: value.y)
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setup()
     }
-    func withMovingBottomRight(to value: CGPoint) -> CGRect {
-        return withMovingRightX(to: value.x).withMovingBottomY(to: value.y)
+    
+    func setup() {
+        holeView.isUserInteractionEnabled = false
+        holedView.isUserInteractionEnabled = true
+        holedView.backgroundColor = UIColor(displayP3Red: 0, green: 0, blue: 0, alpha: 0.5)
+        addSubview(holedView)
+        addSubview(holeView)
     }
 }
 
@@ -47,17 +48,23 @@ class HoledView: UIView {
     static let anchorWidth: CGFloat = 30
     static let anchorLineWidth: CGFloat = 3
     
-    var holeFrame: CGRect = CGRect.zero {
+    fileprivate var holeFrame: CGRect = CGRect.zero {
         didSet {
             lt.center = CGPoint(x: holeFrame.minX + HoledView.anchorWidth / 2 - HoledView.anchorLineWidth,
-                                     y: holeFrame.minY + HoledView.anchorWidth / 2 - HoledView.anchorLineWidth)
+                                y: holeFrame.minY + HoledView.anchorWidth / 2 - HoledView.anchorLineWidth)
             lb.center = CGPoint(x: holeFrame.minX + HoledView.anchorWidth / 2 - HoledView.anchorLineWidth,
-                                     y: holeFrame.maxY - HoledView.anchorWidth / 2 + HoledView.anchorLineWidth)
+                                y: holeFrame.maxY - HoledView.anchorWidth / 2 + HoledView.anchorLineWidth)
             rt.center = CGPoint(x: holeFrame.maxX - HoledView.anchorWidth / 2 + HoledView.anchorLineWidth,
-                                     y: holeFrame.minY + HoledView.anchorWidth / 2 - HoledView.anchorLineWidth)
+                                y: holeFrame.minY + HoledView.anchorWidth / 2 - HoledView.anchorLineWidth)
             rb.center = CGPoint(x: holeFrame.maxX - HoledView.anchorWidth / 2 + HoledView.anchorLineWidth,
-                                     y: holeFrame.maxY - HoledView.anchorWidth / 2 + HoledView.anchorLineWidth)
+                                y: holeFrame.maxY - HoledView.anchorWidth / 2 + HoledView.anchorLineWidth)
             mask(withoutRect: holeFrame)
+        }
+    }
+    
+    var isResizingEnabled: Bool = true {
+        didSet {
+            self.isUserInteractionEnabled = isResizingEnabled
         }
     }
     
@@ -125,22 +132,7 @@ class HoledView: UIView {
         guard let trackingTouch = self.trackingTouch, touches.contains(trackingTouch) else {
             return
         }
-        guard let movingView = movingAnchorView else {
-            return
-        }
-        let position = trackingTouch.location(in: self).offsetBy(dx: cornerDiff.x, dy: cornerDiff.y)
-        switch movingView {
-        case lt:
-            holeFrame = holeFrame.withMovingTopLeft(to: position)
-        case lb:
-            holeFrame = holeFrame.withMovingBottomLeft(to: position)
-        case rt:
-            holeFrame = holeFrame.withMovingTopRight(to: position)
-        case rb:
-            holeFrame = holeFrame.withMovingBottomRight(to: position)
-        default:
-            break
-        }
+        updateToPosition(with: trackingTouch)
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -148,10 +140,16 @@ class HoledView: UIView {
         guard let trackingTouch = self.trackingTouch, touches.contains(trackingTouch) else {
             return
         }
+        updateToPosition(with: trackingTouch)
+        self.trackingTouch = nil
+        self.movingAnchorView = nil
+    }
+    
+    private func updateToPosition(with touch: UITouch) {
         guard let movingView = movingAnchorView else {
             return
         }
-        let position = trackingTouch.location(in: self).offsetBy(dx: cornerDiff.x, dy: cornerDiff.y)
+         let position = touch.location(in: self).offsetBy(dx: cornerDiff.x, dy: cornerDiff.y)
         switch movingView {
         case lt:
             holeFrame = holeFrame.withMovingTopLeft(to: position)
@@ -164,8 +162,6 @@ class HoledView: UIView {
         default:
             break
         }
-        self.trackingTouch = nil
-        self.movingAnchorView = nil
     }
     
     // Ignore user interaction except anchor
@@ -183,6 +179,5 @@ class HoledView: UIView {
         [lt, lb, rt, rb].forEach { view in
             self.addSubview(view)
         }
-        self.isUserInteractionEnabled = true
     }
 }
