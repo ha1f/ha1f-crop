@@ -15,6 +15,9 @@
 		56275B081F750F57005D9C3E /* ha1f_cropTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56275B071F750F57005D9C3E /* ha1f_cropTests.swift */; };
 		56275B141F78A75E005D9C3E /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56275B131F78A75E005D9C3E /* UIImage+Extension.swift */; };
 		56275B151F78C81F005D9C3E /* sample.png in Resources */ = {isa = PBXBuildFile; fileRef = 56275B121F78A181005D9C3E /* sample.png */; };
+		563E4D011F96F2EA000D33DC /* GridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 563E4D001F96F2EA000D33DC /* GridView.swift */; };
+		563E4D031F96F315000D33DC /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 563E4D021F96F315000D33DC /* UIView+Extension.swift */; };
+		563E4D051F96F501000D33DC /* HoledView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 563E4D041F96F501000D33DC /* HoledView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +43,9 @@
 		56275B091F750F57005D9C3E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		56275B121F78A181005D9C3E /* sample.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sample.png; sourceTree = "<group>"; };
 		56275B131F78A75E005D9C3E /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
+		563E4D001F96F2EA000D33DC /* GridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridView.swift; sourceTree = "<group>"; };
+		563E4D021F96F315000D33DC /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
+		563E4D041F96F501000D33DC /* HoledView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoledView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,6 +88,7 @@
 			isa = PBXGroup;
 			children = (
 				56275B121F78A181005D9C3E /* sample.png */,
+				563E4D021F96F315000D33DC /* UIView+Extension.swift */,
 				56275B131F78A75E005D9C3E /* UIImage+Extension.swift */,
 				56275AF21F750F57005D9C3E /* AppDelegate.swift */,
 				56275AF41F750F57005D9C3E /* ViewController.swift */,
@@ -89,6 +96,8 @@
 				56275AF91F750F57005D9C3E /* Assets.xcassets */,
 				56275AFB1F750F57005D9C3E /* LaunchScreen.storyboard */,
 				56275AFE1F750F57005D9C3E /* Info.plist */,
+				563E4D001F96F2EA000D33DC /* GridView.swift */,
+				563E4D041F96F501000D33DC /* HoledView.swift */,
 			);
 			path = "ha1f-crop";
 			sourceTree = "<group>";
@@ -207,7 +216,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				56275B141F78A75E005D9C3E /* UIImage+Extension.swift in Sources */,
+				563E4D051F96F501000D33DC /* HoledView.swift in Sources */,
 				56275AF51F750F57005D9C3E /* ViewController.swift in Sources */,
+				563E4D011F96F2EA000D33DC /* GridView.swift in Sources */,
+				563E4D031F96F315000D33DC /* UIView+Extension.swift in Sources */,
 				56275AF31F750F57005D9C3E /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
