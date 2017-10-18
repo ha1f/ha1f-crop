@@ -27,11 +27,19 @@ class ViewController: UIViewController {
         view.addSubview(imageView)
         view.addSubview(croppingView)
         
-        let width: CGFloat = 300
-        croppingView.holeFrame = CGRect(x: (croppingView.bounds.width - width) / 2,
-                           y: (croppingView.bounds.height - width) / 2,
-                           width: width,
-                           height: width)
+        croppingView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            croppingView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            croppingView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            croppingView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor),
+            croppingView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor),
+            ])
+        let sampleHoleRectWidth: CGFloat = 300
+        let sampleHoleFrame = CGRect(x: (croppingView.bounds.width - sampleHoleRectWidth) / 2,
+                                     y: (croppingView.bounds.height - sampleHoleRectWidth) / 2,
+                                     width: sampleHoleRectWidth,
+                                     height: sampleHoleRectWidth)
+        croppingView.holeFrame = sampleHoleFrame
     }
     
     override func viewDidLayoutSubviews() {

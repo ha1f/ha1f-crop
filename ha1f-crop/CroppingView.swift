@@ -60,10 +60,10 @@ class CroppingView: UIView {
     static let anchorWidth: CGFloat = 30
     static let anchorLineWidth: CGFloat = 3
     
-    let lt = buildAnchorView()
-    let lb = buildAnchorView()
-    let rt = buildAnchorView()
-    let rb = buildAnchorView()
+    private let lt = buildAnchorView()
+    private let lb = buildAnchorView()
+    private let rt = buildAnchorView()
+    private let rb = buildAnchorView()
     
     private static func buildAnchorView() -> UIView {
         let view = UIView()
@@ -155,5 +155,4 @@ class CroppingView: UIView {
             break
         }
     }
-    
 }
