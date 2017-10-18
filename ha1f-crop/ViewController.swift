@@ -18,11 +18,15 @@ class ViewController: UIViewController {
         return imageView
     }()
     
-    private lazy var holeView = GridView()
+    // TODO: refactor to holeView, dimViw to single view to make consistent
+    private lazy var holeView: GridView = {
+        let view = GridView()
+        view.isUserInteractionEnabled = false
+        return view
+    }()
     
     private lazy var holedDimView: HoledView = {
         let holedDimView = HoledView(frame: self.view.bounds)
-        holedDimView.isUserInteractionEnabled = false
         holedDimView.backgroundColor = UIColor(displayP3Red: 0, green: 0, blue: 0, alpha: 0.5)
         return holedDimView
     }()
