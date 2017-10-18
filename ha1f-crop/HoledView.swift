@@ -1,5 +1,5 @@
 //
-//  HoledView.swift
+//  CroppingView.swift
 //  ha1f-crop
 //
 //  Created by ST20591 on 2017/10/18.
@@ -9,12 +9,20 @@
 import UIKit
 
 class CroppingView: UIView {
-    private lazy var holedView = HoledView(frame: self.bounds)
+    private lazy var holedView = UIView(frame: self.bounds)
     private lazy var holeView = GridView(frame: self.holeFrame)
     
     var holeFrame: CGRect = CGRect.zero {
         didSet {
-            self.holedView.holeFrame = holeFrame
+            lt.center = CGPoint(x: holeFrame.minX + CroppingView.anchorWidth / 2 - CroppingView.anchorLineWidth,
+                                y: holeFrame.minY + CroppingView.anchorWidth / 2 - CroppingView.anchorLineWidth)
+            lb.center = CGPoint(x: holeFrame.minX + CroppingView.anchorWidth / 2 - CroppingView.anchorLineWidth,
+                                y: holeFrame.maxY - CroppingView.anchorWidth / 2 + CroppingView.anchorLineWidth)
+            rt.center = CGPoint(x: holeFrame.maxX - CroppingView.anchorWidth / 2 + CroppingView.anchorLineWidth,
+                                y: holeFrame.minY + CroppingView.anchorWidth / 2 - CroppingView.anchorLineWidth)
+            rb.center = CGPoint(x: holeFrame.maxX - CroppingView.anchorWidth / 2 + CroppingView.anchorLineWidth,
+                                y: holeFrame.maxY - CroppingView.anchorWidth / 2 + CroppingView.anchorLineWidth)
+            holedView.mask(withoutRect: holeFrame)
             self.setNeedsLayout()
         }
     }
@@ -41,47 +49,21 @@ class CroppingView: UIView {
         holedView.backgroundColor = UIColor(displayP3Red: 0, green: 0, blue: 0, alpha: 0.5)
         addSubview(holedView)
         addSubview(holeView)
+        
+        /// resizing
+        [lt, lb, rt, rb].forEach { view in
+            holedView.addSubview(view)
+        }
     }
-}
-
-class HoledView: UIView {
+    
+    /// resizing
     static let anchorWidth: CGFloat = 30
     static let anchorLineWidth: CGFloat = 3
-    
-    fileprivate var holeFrame: CGRect = CGRect.zero {
-        didSet {
-            lt.center = CGPoint(x: holeFrame.minX + HoledView.anchorWidth / 2 - HoledView.anchorLineWidth,
-                                y: holeFrame.minY + HoledView.anchorWidth / 2 - HoledView.anchorLineWidth)
-            lb.center = CGPoint(x: holeFrame.minX + HoledView.anchorWidth / 2 - HoledView.anchorLineWidth,
-                                y: holeFrame.maxY - HoledView.anchorWidth / 2 + HoledView.anchorLineWidth)
-            rt.center = CGPoint(x: holeFrame.maxX - HoledView.anchorWidth / 2 + HoledView.anchorLineWidth,
-                                y: holeFrame.minY + HoledView.anchorWidth / 2 - HoledView.anchorLineWidth)
-            rb.center = CGPoint(x: holeFrame.maxX - HoledView.anchorWidth / 2 + HoledView.anchorLineWidth,
-                                y: holeFrame.maxY - HoledView.anchorWidth / 2 + HoledView.anchorLineWidth)
-            mask(withoutRect: holeFrame)
-        }
-    }
-    
-    var isResizingEnabled: Bool = true {
-        didSet {
-            self.isUserInteractionEnabled = isResizingEnabled
-        }
-    }
     
     let lt = buildAnchorView()
     let lb = buildAnchorView()
     let rt = buildAnchorView()
     let rb = buildAnchorView()
-    
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        setup()
-    }
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setup()
-    }
     
     private static func buildAnchorView() -> UIView {
         let view = UIView()
@@ -94,7 +76,17 @@ class HoledView: UIView {
         return [lt, lb, rt, rb].contains(view)
     }
     
-    /// Resizing
+    // Ignore user interaction except anchor
+    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        guard let view = super.hitTest(point, with: event) else {
+            return nil
+        }
+        guard isAnchorView(view) else {
+            return nil
+        }
+        return view
+    }
+    
     private var movingAnchorView: UIView? = nil
     private var trackingTouch: UITouch? = nil
     private var cornerDiff = CGPoint.zero
@@ -149,7 +141,7 @@ class HoledView: UIView {
         guard let movingView = movingAnchorView else {
             return
         }
-         let position = touch.location(in: self).offsetBy(dx: cornerDiff.x, dy: cornerDiff.y)
+        let position = touch.location(in: self).offsetBy(dx: cornerDiff.x, dy: cornerDiff.y)
         switch movingView {
         case lt:
             holeFrame = holeFrame.withMovingTopLeft(to: position)
@@ -164,20 +156,4 @@ class HoledView: UIView {
         }
     }
     
-    // Ignore user interaction except anchor
-    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-        guard let view = super.hitTest(point, with: event) else {
-            return nil
-        }
-        guard isAnchorView(view) else {
-            return nil
-        }
-        return view
-    }
-    
-    private func setup() {
-        [lt, lb, rt, rb].forEach { view in
-            self.addSubview(view)
-        }
-    }
 }
