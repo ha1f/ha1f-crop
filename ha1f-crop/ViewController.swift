@@ -34,7 +34,7 @@ class ViewController: UIViewController {
             croppingView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor),
             croppingView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor),
             ])
-        let sampleHoleRectWidth: CGFloat = 300
+        let sampleHoleRectWidth: CGFloat = 200
         let sampleHoleFrame = CGRect(x: (croppingView.bounds.width - sampleHoleRectWidth) / 2,
                                      y: (croppingView.bounds.height - sampleHoleRectWidth) / 2,
                                      width: sampleHoleRectWidth,

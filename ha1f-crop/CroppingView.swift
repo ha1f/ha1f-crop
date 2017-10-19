@@ -10,16 +10,16 @@ import UIKit
 
 struct TouchState {
     let trackingTouch: UITouch
-    private let firstTouchLocation: CGPoint
+    let firstTouchLocation: CGPoint
     private let gestureView: UIView
     
-    private var _currentLocation: CGPoint {
+    var currentTouchLocation: CGPoint {
         return trackingTouch.location(in: gestureView)
     }
     
     var relativeVector: CGVector {
-        return CGVector(dx: _currentLocation.x - firstTouchLocation.x,
-                        dy: _currentLocation.y - firstTouchLocation.y)
+        return CGVector(dx: currentTouchLocation.x - firstTouchLocation.x,
+                        dy: currentTouchLocation.y - firstTouchLocation.y)
     }
     
     init(touch: UITouch, in gestureView: UIView, with event: UIEvent?) {
@@ -28,11 +28,8 @@ struct TouchState {
         self.gestureView = gestureView
     }
     
-    func doOnValidTouch(_ touches: Set<UITouch>, processWithRelativePosition: (CGVector) -> Void) {
-        guard touches.contains(trackingTouch) else {
-            return
-        }
-        processWithRelativePosition(self.relativeVector)
+    func containsValidTouch(_ touches: Set<UITouch>) -> Bool {
+        return touches.contains(trackingTouch)
     }
 }
 
@@ -96,6 +93,21 @@ class CroppingView: UIView {
     private let rt = _buildAnchorView()
     private let rb = _buildAnchorView()
     
+    private func _cornerPosition(of cornerView: UIView) -> CornerPosition? {
+        switch cornerView {
+        case lt:
+            return .topLeft
+        case lb:
+            return .bottomLeft
+        case rt:
+            return .topRight
+        case rb:
+            return .bottomRight
+        default:
+            return nil
+        }
+    }
+    
     private static func _buildAnchorView() -> UIView {
         let view = UIView()
         view.backgroundColor = .white
@@ -103,8 +115,8 @@ class CroppingView: UIView {
         return view
     }
     
-    private func isAnchorView(_ view: UIView) -> Bool {
-        return [lt, lb, rt, rb].contains(view)
+    private func _isAnchorView(_ view: UIView) -> Bool {
+        return _cornerPosition(of: view) != nil
     }
     
     // Ignore user interaction except anchor
@@ -112,76 +124,59 @@ class CroppingView: UIView {
         guard let view = super.hitTest(point, with: event) else {
             return nil
         }
-        guard isAnchorView(view) else {
+        guard _isAnchorView(view) else {
             return nil
         }
         return view
     }
     
-    private var cornerDiff = CGPoint.zero
-    private var movingAnchorView: UIView? = nil
-    private var movingAnchorInitialPosition: CGPoint?
-    private var draggingState: TouchState? = nil
+    struct MovingCornerState {
+        let initialiPoint: CGPoint
+        let cornerPosition: CornerPosition
+    }
+    
+    private var touchState: TouchState? = nil
+    private var movingCornerState: MovingCornerState? = nil
+    
+    private func _invalidateTouchState() {
+        touchState = nil
+        movingCornerState = nil
+    }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
         guard touches.count == 1, let firstTouch = touches.first else {
-            movingAnchorView = nil
-            draggingState = nil
+            _invalidateTouchState()
             return
         }
-        if let touchedView = self.hitTest(firstTouch.location(in: self), with: event) {
-            if  isAnchorView(touchedView) {
-                draggingState = TouchState(touch: firstTouch, in: self, with: event)
-                movingAnchorView = touchedView
-                
-                switch touchedView {
-                case lt:
-                    movingAnchorInitialPosition = holeFrame.getPoint(of: .topLeft)
-                case lb:
-                    movingAnchorInitialPosition =  holeFrame.getPoint(of: .bottomLeft)
-                case rt:
-                    movingAnchorInitialPosition = holeFrame.getPoint(of: .topRight)
-                case rb:
-                    movingAnchorInitialPosition = holeFrame.getPoint(of: .bottomRight)
-                default:
-                    break
-                }
-            }
+        if let touchedView = self.hitTest(firstTouch.location(in: self), with: event),
+            let position = _cornerPosition(of: touchedView) {
+            movingCornerState = MovingCornerState(initialiPoint: holeFrame.getPoint(of: position),
+                                                  cornerPosition: position)
+            touchState = TouchState(touch: firstTouch, in: self, with: event)
         }
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesMoved(touches, with: event)
-        draggingState?.doOnValidTouch(touches) { relativePosition in
-            updateToPosition(to: movingAnchorInitialPosition!.offsetBy(relativePosition))
+        guard let touchState = self.touchState, touchState.containsValidTouch(touches) else {
+            return
         }
+        guard let state = movingCornerState else {
+            return
+        }
+        holeFrame = holeFrame.withMovingCorner(of: state.cornerPosition, to: state.initialiPoint.offsetBy(touchState.relativeVector))
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesEnded(touches, with: event)
-        draggingState?.doOnValidTouch(touches) { relativePosition in
-            updateToPosition(to: movingAnchorInitialPosition!.offsetBy(relativePosition))
-        }
-        self.draggingState = nil
-        self.movingAnchorView = nil
-    }
-    
-    private func updateToPosition(to point: CGPoint) {
-        guard let movingView = movingAnchorView else {
+        guard let touchState = self.touchState, touchState.containsValidTouch(touches) else {
             return
         }
-        switch movingView {
-        case lt:
-            holeFrame = holeFrame.withMovingCorner(of: .topLeft, to: point)
-        case lb:
-            holeFrame = holeFrame.withMovingCorner(of: .bottomLeft, to: point)
-        case rt:
-            holeFrame = holeFrame.withMovingCorner(of: .topRight, to: point)
-        case rb:
-            holeFrame = holeFrame.withMovingCorner(of: .bottomRight, to: point)
-        default:
-            break
+        guard let state = movingCornerState else {
+            return
         }
+        holeFrame = holeFrame.withMovingCorner(of: state.cornerPosition, to: state.initialiPoint.offsetBy(touchState.relativeVector))
+        _invalidateTouchState()
     }
 }
