@@ -48,27 +48,29 @@ class ViewController: UIViewController {
             croppingView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor),
             ])
         
-        // はじめはimageViewを適当にセット
-        let imageViewSize = CGRect(origin: .zero, size: imageView.sizeThatFits(view.bounds.size)).insetBy(dx: 50, dy: 50).size
-        scrollView.frame = CGRect(origin: .zero, size: imageViewSize)
-        scrollView.center = view.center
+        let holeSize = CGRect(origin: .zero, size: imageView.sizeThatFits(view.bounds.size)).insetBy(dx: 50, dy: 50).size
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            scrollView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            scrollView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            scrollView.widthAnchor.constraint(equalToConstant: holeSize.width),
+            scrollView.heightAnchor.constraint(equalToConstant: holeSize.height)
+            ])
         
-        imageView.frame = CGRect(origin: .zero, size: imageViewSize)
+        imageView.frame = CGRect(origin: .zero, size: holeSize)
     }
     
     override func viewDidLayoutSubviews() {
-        croppingView.holeFrame = CGRect(x: scrollView.frame.minX - croppingView.frame.minX, y: scrollView.frame.minY - croppingView.frame.minY, width: scrollView.frame.width, height: scrollView.frame.height)
+        croppingView.holeFrame = CGRect(x: scrollView.frame.minX - croppingView.frame.minX,
+                                        y: scrollView.frame.minY - croppingView.frame.minY,
+                                        width: scrollView.frame.width,
+                                        height: scrollView.frame.height)
     }
 }
 
 extension ViewController: UIScrollViewDelegate {
     
     // MARK: - UIScrollViewDelegate
-    
-    func scrollViewDidZoom(_ scrollView: UIScrollView) {
-//        scrollView.contentSize = imageView.frame.size
-        print(imageView.frame)
-    }
     
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return imageView
