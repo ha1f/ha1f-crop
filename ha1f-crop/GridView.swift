@@ -98,7 +98,6 @@ class GridView: UIView {
     private func _setup() {
         backgroundColor = .clear
         _updateAppearance()
-        setNeedsDisplay()
     }
     
     private func _updateAppearance() {

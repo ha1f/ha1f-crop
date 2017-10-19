@@ -39,24 +39,16 @@ class CroppingView: UIView {
     
     var holeFrame: CGRect = CGRect.zero {
         didSet {
-            _updateAnchorPositions()
-            holedView.mask(withoutRect: holeFrame)
             self.setNeedsLayout()
         }
-    }
-    
-    private func _updateAnchorPositions() {
-        let cornerViewOffset = CroppingView.anchorWidth / 2 - CroppingView.anchorLineWidth
-        lt.center = holeFrame.getPoint(of: .topLeft).offsetBy(dx: cornerViewOffset, dy: cornerViewOffset)
-        lb.center = holeFrame.getPoint(of: .bottomLeft).offsetBy(dx: cornerViewOffset, dy: -cornerViewOffset)
-        rt.center = holeFrame.getPoint(of: .topRight).offsetBy(dx: -cornerViewOffset, dy: cornerViewOffset)
-        rb.center = holeFrame.getPoint(of: .bottomRight).offsetBy(dx: -cornerViewOffset, dy: -cornerViewOffset)
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
         self.holedView.frame = self.bounds
         self.holeView.frame = self.holeFrame
+        _updateCornerViewLayouts()
+        holedView.mask(withoutRect: holeFrame)
     }
     
     // MARK: Initializers
@@ -93,6 +85,13 @@ class CroppingView: UIView {
     private let rt = _buildAnchorView()
     private let rb = _buildAnchorView()
     
+    private static func _buildAnchorView() -> UIView {
+        let view = UIView()
+        view.backgroundColor = .white
+        view.frame = CGRect(x: 0, y: 0, width: anchorWidth, height: anchorWidth)
+        return view
+    }
+    
     private func _cornerPosition(of cornerView: UIView) -> CornerPosition? {
         switch cornerView {
         case lt:
@@ -108,11 +107,12 @@ class CroppingView: UIView {
         }
     }
     
-    private static func _buildAnchorView() -> UIView {
-        let view = UIView()
-        view.backgroundColor = .white
-        view.frame = CGRect(x: 0, y: 0, width: anchorWidth, height: anchorWidth)
-        return view
+    private func _updateCornerViewLayouts() {
+        let cornerViewOffset = CroppingView.anchorWidth / 2 - CroppingView.anchorLineWidth
+        lt.center = holeFrame.getPoint(of: .topLeft).offsetBy(dx: cornerViewOffset, dy: cornerViewOffset)
+        lb.center = holeFrame.getPoint(of: .bottomLeft).offsetBy(dx: cornerViewOffset, dy: -cornerViewOffset)
+        rt.center = holeFrame.getPoint(of: .topRight).offsetBy(dx: -cornerViewOffset, dy: cornerViewOffset)
+        rb.center = holeFrame.getPoint(of: .bottomRight).offsetBy(dx: -cornerViewOffset, dy: -cornerViewOffset)
     }
     
     private func _isAnchorView(_ view: UIView) -> Bool {
