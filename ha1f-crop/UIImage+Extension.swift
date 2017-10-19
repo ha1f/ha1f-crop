@@ -15,6 +15,8 @@ extension CGFloat {
     }
 }
 
+// この透過カットやってみたい
+// https://github.com/tomohisa/UIImage-Trim
 extension UIImage {
     func cropped(to rect: CGRect) -> UIImage? {
         guard let imgRef = cgImage?.cropping(to: rect) else {
