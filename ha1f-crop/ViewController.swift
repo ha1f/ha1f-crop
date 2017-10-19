@@ -21,11 +21,12 @@ class ViewController: UIViewController {
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.delegate = self
-        scrollView.minimumZoomScale = 0.5
-        scrollView.maximumZoomScale = 3.0
+        scrollView.minimumZoomScale = 1.0
+        scrollView.maximumZoomScale = 5.0
         scrollView.showsVerticalScrollIndicator = false
         scrollView.showsHorizontalScrollIndicator = false
         scrollView.center = view.center
+        scrollView.clipsToBounds = false
         return scrollView
     }()
     
@@ -47,23 +48,16 @@ class ViewController: UIViewController {
             croppingView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor),
             ])
         
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            scrollView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor),
-            scrollView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor),
-            ])
-        
-        // holeをサンプルでセット
-        let sampleHoleRectWidth: CGFloat = 200
-        croppingView.holeFrame = CGRect(x: (croppingView.bounds.width - sampleHoleRectWidth) / 2,
-                                        y: (croppingView.bounds.height - sampleHoleRectWidth) / 2,
-                                        width: sampleHoleRectWidth,
-                                        height: sampleHoleRectWidth)
-        
         // はじめはimageViewを適当にセット
-        imageView.frame = view.bounds
+        let imageViewSize = CGRect(origin: .zero, size: imageView.sizeThatFits(view.bounds.size)).insetBy(dx: 50, dy: 50).size
+        scrollView.frame = CGRect(origin: .zero, size: imageViewSize)
+        scrollView.center = view.center
+        
+        imageView.frame = CGRect(origin: .zero, size: imageViewSize)
+    }
+    
+    override func viewDidLayoutSubviews() {
+        croppingView.holeFrame = CGRect(x: scrollView.frame.minX - croppingView.frame.minX, y: scrollView.frame.minY - croppingView.frame.minY, width: scrollView.frame.width, height: scrollView.frame.height)
     }
 }
 
@@ -72,16 +66,8 @@ extension ViewController: UIScrollViewDelegate {
     // MARK: - UIScrollViewDelegate
     
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
-        let imageViewSize = imageView.frame.size
-        let scrollViewSize = scrollView.bounds.size
-
-        let verticalPadding = max(scrollViewSize.height - imageViewSize.height, 0) / 2
-        let horizontalPadding = max(scrollViewSize.width - imageViewSize.width, 0) / 2
-
-        scrollView.contentInset = UIEdgeInsets(top: verticalPadding,
-                                               left: horizontalPadding,
-                                               bottom: verticalPadding,
-                                               right: horizontalPadding)
+//        scrollView.contentSize = imageView.frame.size
+        print(imageView.frame)
     }
     
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
