@@ -14,17 +14,21 @@ class CroppingView: UIView {
     
     var holeFrame: CGRect = CGRect.zero {
         didSet {
-            lt.center = CGPoint(x: holeFrame.minX + CroppingView.anchorWidth / 2 - CroppingView.anchorLineWidth,
-                                y: holeFrame.minY + CroppingView.anchorWidth / 2 - CroppingView.anchorLineWidth)
-            lb.center = CGPoint(x: holeFrame.minX + CroppingView.anchorWidth / 2 - CroppingView.anchorLineWidth,
-                                y: holeFrame.maxY - CroppingView.anchorWidth / 2 + CroppingView.anchorLineWidth)
-            rt.center = CGPoint(x: holeFrame.maxX - CroppingView.anchorWidth / 2 + CroppingView.anchorLineWidth,
-                                y: holeFrame.minY + CroppingView.anchorWidth / 2 - CroppingView.anchorLineWidth)
-            rb.center = CGPoint(x: holeFrame.maxX - CroppingView.anchorWidth / 2 + CroppingView.anchorLineWidth,
-                                y: holeFrame.maxY - CroppingView.anchorWidth / 2 + CroppingView.anchorLineWidth)
+            _updateAnchorPositions()
             holedView.mask(withoutRect: holeFrame)
             self.setNeedsLayout()
         }
+    }
+    
+    private func _updateAnchorPositions() {
+        lt.center = CGPoint(x: holeFrame.minX + CroppingView.anchorWidth / 2 - CroppingView.anchorLineWidth,
+                            y: holeFrame.minY + CroppingView.anchorWidth / 2 - CroppingView.anchorLineWidth)
+        lb.center = CGPoint(x: holeFrame.minX + CroppingView.anchorWidth / 2 - CroppingView.anchorLineWidth,
+                            y: holeFrame.maxY - CroppingView.anchorWidth / 2 + CroppingView.anchorLineWidth)
+        rt.center = CGPoint(x: holeFrame.maxX - CroppingView.anchorWidth / 2 + CroppingView.anchorLineWidth,
+                            y: holeFrame.minY + CroppingView.anchorWidth / 2 - CroppingView.anchorLineWidth)
+        rb.center = CGPoint(x: holeFrame.maxX - CroppingView.anchorWidth / 2 + CroppingView.anchorLineWidth,
+                            y: holeFrame.maxY - CroppingView.anchorWidth / 2 + CroppingView.anchorLineWidth)
     }
     
     override func layoutSubviews() {
@@ -33,17 +37,19 @@ class CroppingView: UIView {
         self.holeView.frame = self.holeFrame
     }
     
+    // MARK: Initializers
+    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        setup()
+        _setup()
     }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setup()
+        _setup()
     }
     
-    func setup() {
+    private func _setup() {
         holeView.isUserInteractionEnabled = false
         holedView.isUserInteractionEnabled = true
         holedView.backgroundColor = UIColor(displayP3Red: 0, green: 0, blue: 0, alpha: 0.5)
@@ -60,12 +66,12 @@ class CroppingView: UIView {
     static let anchorWidth: CGFloat = 30
     static let anchorLineWidth: CGFloat = 3
     
-    private let lt = buildAnchorView()
-    private let lb = buildAnchorView()
-    private let rt = buildAnchorView()
-    private let rb = buildAnchorView()
+    private let lt = _buildAnchorView()
+    private let lb = _buildAnchorView()
+    private let rt = _buildAnchorView()
+    private let rb = _buildAnchorView()
     
-    private static func buildAnchorView() -> UIView {
+    private static func _buildAnchorView() -> UIView {
         let view = UIView()
         view.backgroundColor = .white
         view.frame = CGRect(x: 0, y: 0, width: anchorWidth, height: anchorWidth)
@@ -95,6 +101,7 @@ class CroppingView: UIView {
         super.touchesBegan(touches, with: event)
         guard touches.count == 1, let firstTouch = touches.first else {
             movingAnchorView = nil
+            self.trackingTouch = nil
             return
         }
         let touchPosition = firstTouch.location(in: self)
