@@ -8,6 +8,34 @@
 
 import UIKit
 
+struct TouchState {
+    let trackingTouch: UITouch
+    private let firstTouchLocation: CGPoint
+    private let gestureView: UIView
+    
+    private var _currentLocation: CGPoint {
+        return trackingTouch.location(in: gestureView)
+    }
+    
+    var relativeVector: CGVector {
+        return CGVector(dx: _currentLocation.x - firstTouchLocation.x,
+                        dy: _currentLocation.y - firstTouchLocation.y)
+    }
+    
+    init(touch: UITouch, in gestureView: UIView, with event: UIEvent?) {
+        self.trackingTouch = touch
+        self.firstTouchLocation = touch.location(in: gestureView)
+        self.gestureView = gestureView
+    }
+    
+    func doOnValidTouch(_ touches: Set<UITouch>, processWithRelativePosition: (CGVector) -> Void) {
+        guard touches.contains(trackingTouch) else {
+            return
+        }
+        processWithRelativePosition(self.relativeVector)
+    }
+}
+
 class CroppingView: UIView {
     private lazy var holedView = UIView(frame: self.bounds)
     private lazy var holeView = GridView(frame: self.holeFrame)
@@ -21,14 +49,11 @@ class CroppingView: UIView {
     }
     
     private func _updateAnchorPositions() {
-        lt.center = CGPoint(x: holeFrame.minX + CroppingView.anchorWidth / 2 - CroppingView.anchorLineWidth,
-                            y: holeFrame.minY + CroppingView.anchorWidth / 2 - CroppingView.anchorLineWidth)
-        lb.center = CGPoint(x: holeFrame.minX + CroppingView.anchorWidth / 2 - CroppingView.anchorLineWidth,
-                            y: holeFrame.maxY - CroppingView.anchorWidth / 2 + CroppingView.anchorLineWidth)
-        rt.center = CGPoint(x: holeFrame.maxX - CroppingView.anchorWidth / 2 + CroppingView.anchorLineWidth,
-                            y: holeFrame.minY + CroppingView.anchorWidth / 2 - CroppingView.anchorLineWidth)
-        rb.center = CGPoint(x: holeFrame.maxX - CroppingView.anchorWidth / 2 + CroppingView.anchorLineWidth,
-                            y: holeFrame.maxY - CroppingView.anchorWidth / 2 + CroppingView.anchorLineWidth)
+        let cornerViewOffset = CroppingView.anchorWidth / 2 - CroppingView.anchorLineWidth
+        lt.center = holeFrame.getPoint(of: .topLeft).offsetBy(dx: cornerViewOffset, dy: cornerViewOffset)
+        lb.center = holeFrame.getPoint(of: .bottomLeft).offsetBy(dx: cornerViewOffset, dy: -cornerViewOffset)
+        rt.center = holeFrame.getPoint(of: .topRight).offsetBy(dx: -cornerViewOffset, dy: cornerViewOffset)
+        rb.center = holeFrame.getPoint(of: .bottomRight).offsetBy(dx: -cornerViewOffset, dy: -cornerViewOffset)
     }
     
     override func layoutSubviews() {
@@ -93,32 +118,32 @@ class CroppingView: UIView {
         return view
     }
     
-    private var movingAnchorView: UIView? = nil
-    private var trackingTouch: UITouch? = nil
     private var cornerDiff = CGPoint.zero
+    private var movingAnchorView: UIView? = nil
+    private var movingAnchorInitialPosition: CGPoint?
+    private var draggingState: TouchState? = nil
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
         guard touches.count == 1, let firstTouch = touches.first else {
             movingAnchorView = nil
-            self.trackingTouch = nil
+            draggingState = nil
             return
         }
-        let touchPosition = firstTouch.location(in: self)
         if let touchedView = self.hitTest(firstTouch.location(in: self), with: event) {
             if  isAnchorView(touchedView) {
-                self.trackingTouch = firstTouch
+                draggingState = TouchState(touch: firstTouch, in: self, with: event)
                 movingAnchorView = touchedView
                 
                 switch touchedView {
                 case lt:
-                    cornerDiff = CGPoint(x: holeFrame.minX - touchPosition.x, y: holeFrame.minY - touchPosition.y)
+                    movingAnchorInitialPosition = holeFrame.getPoint(of: .topLeft)
                 case lb:
-                    cornerDiff = CGPoint(x: holeFrame.minX - touchPosition.x, y: holeFrame.maxY - touchPosition.y)
+                    movingAnchorInitialPosition =  holeFrame.getPoint(of: .bottomLeft)
                 case rt:
-                    cornerDiff = CGPoint(x: holeFrame.maxX - touchPosition.x, y: holeFrame.minY - touchPosition.y)
+                    movingAnchorInitialPosition = holeFrame.getPoint(of: .topRight)
                 case rb:
-                    cornerDiff = CGPoint(x: holeFrame.maxX - touchPosition.x, y: holeFrame.maxY - touchPosition.y)
+                    movingAnchorInitialPosition = holeFrame.getPoint(of: .bottomRight)
                 default:
                     break
                 }
@@ -128,36 +153,33 @@ class CroppingView: UIView {
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesMoved(touches, with: event)
-        guard let trackingTouch = self.trackingTouch, touches.contains(trackingTouch) else {
-            return
+        draggingState?.doOnValidTouch(touches) { relativePosition in
+            updateToPosition(to: movingAnchorInitialPosition!.offsetBy(relativePosition))
         }
-        updateToPosition(with: trackingTouch)
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesEnded(touches, with: event)
-        guard let trackingTouch = self.trackingTouch, touches.contains(trackingTouch) else {
-            return
+        draggingState?.doOnValidTouch(touches) { relativePosition in
+            updateToPosition(to: movingAnchorInitialPosition!.offsetBy(relativePosition))
         }
-        updateToPosition(with: trackingTouch)
-        self.trackingTouch = nil
+        self.draggingState = nil
         self.movingAnchorView = nil
     }
     
-    private func updateToPosition(with touch: UITouch) {
+    private func updateToPosition(to point: CGPoint) {
         guard let movingView = movingAnchorView else {
             return
         }
-        let position = touch.location(in: self).offsetBy(dx: cornerDiff.x, dy: cornerDiff.y)
         switch movingView {
         case lt:
-            holeFrame = holeFrame.withMovingTopLeft(to: position)
+            holeFrame = holeFrame.withMovingCorner(of: .topLeft, to: point)
         case lb:
-            holeFrame = holeFrame.withMovingBottomLeft(to: position)
+            holeFrame = holeFrame.withMovingCorner(of: .bottomLeft, to: point)
         case rt:
-            holeFrame = holeFrame.withMovingTopRight(to: position)
+            holeFrame = holeFrame.withMovingCorner(of: .topRight, to: point)
         case rb:
-            holeFrame = holeFrame.withMovingBottomRight(to: position)
+            holeFrame = holeFrame.withMovingCorner(of: .bottomRight, to: point)
         default:
             break
         }

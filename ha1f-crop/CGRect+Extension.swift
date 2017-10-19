@@ -23,17 +23,17 @@ extension CGRect {
     }
     
     // TODO: refactor to single call
-    func withMovingTopLeft(to value: CGPoint) -> CGRect {
-        return withMovingLeftX(to: value.x).withMovingTopY(to: value.y)
-    }
-    func withMovingTopRight(to value: CGPoint) -> CGRect {
-        return withMovingRightX(to: value.x).withMovingTopY(to: value.y)
-    }
-    func withMovingBottomLeft(to value: CGPoint) -> CGRect {
-        return withMovingLeftX(to: value.x).withMovingBottomY(to: value.y)
-    }
-    func withMovingBottomRight(to value: CGPoint) -> CGRect {
-        return withMovingRightX(to: value.x).withMovingBottomY(to: value.y)
+    func withMovingCorner(of position: CornerPosition, to point: CGPoint) -> CGRect {
+        switch position {
+        case .topLeft:
+            return withMovingLeftX(to: point.x).withMovingTopY(to: point.y)
+        case .topRight:
+            return withMovingRightX(to: point.x).withMovingTopY(to: point.y)
+        case .bottomLeft:
+            return withMovingLeftX(to: point.x).withMovingBottomY(to: point.y)
+        case .bottomRight:
+            return withMovingRightX(to: point.x).withMovingBottomY(to: point.y)
+        }
     }
 }
 

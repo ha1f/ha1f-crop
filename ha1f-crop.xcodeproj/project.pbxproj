@@ -20,6 +20,9 @@
 		563E4D051F96F501000D33DC /* CroppingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 563E4D041F96F501000D33DC /* CroppingView.swift */; };
 		563E4D071F974D4B000D33DC /* CGRect+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 563E4D061F974D4B000D33DC /* CGRect+Extension.swift */; };
 		563E4D091F974D76000D33DC /* CGPoint+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 563E4D081F974D76000D33DC /* CGPoint+Extension.swift */; };
+		563E4D0B1F9843B3000D33DC /* CornerPosition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 563E4D0A1F9843B3000D33DC /* CornerPosition.swift */; };
+		563E4D0D1F9843EA000D33DC /* CornerPositionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 563E4D0C1F9843EA000D33DC /* CornerPositionTests.swift */; };
+		563E4D0F1F984788000D33DC /* CGVector+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 563E4D0E1F984788000D33DC /* CGVector+Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,6 +53,9 @@
 		563E4D041F96F501000D33DC /* CroppingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CroppingView.swift; sourceTree = "<group>"; };
 		563E4D061F974D4B000D33DC /* CGRect+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGRect+Extension.swift"; sourceTree = "<group>"; };
 		563E4D081F974D76000D33DC /* CGPoint+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGPoint+Extension.swift"; sourceTree = "<group>"; };
+		563E4D0A1F9843B3000D33DC /* CornerPosition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CornerPosition.swift; sourceTree = "<group>"; };
+		563E4D0C1F9843EA000D33DC /* CornerPositionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CornerPositionTests.swift; sourceTree = "<group>"; };
+		563E4D0E1F984788000D33DC /* CGVector+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGVector+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,6 +110,8 @@
 				563E4D041F96F501000D33DC /* CroppingView.swift */,
 				563E4D061F974D4B000D33DC /* CGRect+Extension.swift */,
 				563E4D081F974D76000D33DC /* CGPoint+Extension.swift */,
+				563E4D0A1F9843B3000D33DC /* CornerPosition.swift */,
+				563E4D0E1F984788000D33DC /* CGVector+Extension.swift */,
 			);
 			path = "ha1f-crop";
 			sourceTree = "<group>";
@@ -113,6 +121,7 @@
 			children = (
 				56275B071F750F57005D9C3E /* ha1f_cropTests.swift */,
 				56275B091F750F57005D9C3E /* Info.plist */,
+				563E4D0C1F9843EA000D33DC /* CornerPositionTests.swift */,
 			);
 			path = "ha1f-cropTests";
 			sourceTree = "<group>";
@@ -226,6 +235,8 @@
 				563E4D071F974D4B000D33DC /* CGRect+Extension.swift in Sources */,
 				56275AF51F750F57005D9C3E /* ViewController.swift in Sources */,
 				563E4D011F96F2EA000D33DC /* GridView.swift in Sources */,
+				563E4D0B1F9843B3000D33DC /* CornerPosition.swift in Sources */,
+				563E4D0F1F984788000D33DC /* CGVector+Extension.swift in Sources */,
 				563E4D031F96F315000D33DC /* UIView+Extension.swift in Sources */,
 				563E4D091F974D76000D33DC /* CGPoint+Extension.swift in Sources */,
 				56275AF31F750F57005D9C3E /* AppDelegate.swift in Sources */,
@@ -237,6 +248,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				56275B081F750F57005D9C3E /* ha1f_cropTests.swift in Sources */,
+				563E4D0D1F9843EA000D33DC /* CornerPositionTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
