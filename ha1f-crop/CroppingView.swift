@@ -65,7 +65,7 @@ class CroppingView: UIView {
     
     private func _setup() {
         holeView.isUserInteractionEnabled = false
-        holedView.isUserInteractionEnabled = true
+        holedView.isUserInteractionEnabled = self.isResizingEnabled
         holedView.backgroundColor = UIColor(displayP3Red: 0, green: 0, blue: 0, alpha: 0.5)
         addSubview(holedView)
         addSubview(holeView)
@@ -84,6 +84,13 @@ class CroppingView: UIView {
     private let lb = _buildAnchorView()
     private let rt = _buildAnchorView()
     private let rb = _buildAnchorView()
+    
+    var isResizingEnabled: Bool = false {
+        didSet {
+            self.isUserInteractionEnabled = isResizingEnabled
+            holedView.isUserInteractionEnabled = isResizingEnabled
+        }
+    }
     
     private static func _buildAnchorView() -> UIView {
         let view = UIView()
