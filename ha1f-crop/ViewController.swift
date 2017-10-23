@@ -69,7 +69,17 @@ class ViewController: UIViewController {
     }
     
     private func resetHole() {
-        let holeSize = CGRect(origin: .zero, size: imageView.sizeThatFits(view.bounds.size)).insetBy(dx: 50, dy: 50).size
+        let preferredSize = imageView.sizeThatFits(view.bounds.size)
+        let preferredRect = CGRect(origin: .zero, size: preferredSize)
+        let holeSize: CGSize
+        if preferredRect.width > (view.bounds.width - 50) {
+            holeSize = preferredRect.insetBy(dx: 50, dy: 50 / preferredSize.width * preferredSize.height).size
+        } else if preferredRect.height > (view.bounds.height - 50) {
+            holeSize = preferredRect.insetBy(dx: 50 / preferredSize.height * preferredSize.width, dy: 50 / preferredSize.width * preferredSize.height).size
+        } else {
+            holeSize = preferredSize
+        }
+        print("hole", holeSize, view.bounds.size, imageView.sizeThatFits(view.bounds.size), preferredSize)
         imageView.frame = CGRect(origin: .zero, size: holeSize)
         scrollView.frame = CGRect(origin: .zero, size: holeSize)
         scrollView.center = view.center
@@ -82,12 +92,16 @@ class ViewController: UIViewController {
             return
         }
         let visibleRect = imageView.convert(scrollView.bounds, from: scrollView)
+        print("visible", visibleRect)
         let scale: CGFloat = image.size.width / (imageView.frame.width / scrollView.zoomScale)
         let scaledRect = CGRect(x: visibleRect.minX * scale,
                                 y: visibleRect.minY * scale,
                                 width: visibleRect.width * scale,
                                 height: visibleRect.height * scale)
+        print("scaled", scaledRect)
+        print("image", image.size)
         let croppedImage = image.cropped(to: scaledRect)
+        print("cropped", croppedImage!.size)
         imageView.image = croppedImage
         scrollView.setZoomScale(1.0, animated: false)
         resetHole()
