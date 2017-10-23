@@ -104,7 +104,9 @@ class ViewController: UIViewController {
 extension ViewController: CroppingViewDelegate {
     // TODO: shouldChangeで最大サイズを設定
     func croppingView(holeFrameDidChange cropingView: CroppingView, holeFrame: CGRect) {
+        let oldFrame = scrollView.frame
         scrollView.frame = holeFrame.offsetBy(dx: croppingView.frame.minX, dy: croppingView.frame.minY)
+        scrollView.contentOffset = scrollView.contentOffset.offsetBy(dx: scrollView.frame.minX - oldFrame.minX, dy: scrollView.frame.minY - oldFrame.minY)
         // I don't know why, but if this line is not present, we cannot scroll after resizing
         scrollView.setZoomScale(scrollView.zoomScale, animated: false)
     }
