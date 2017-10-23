@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol CroppingViewDelegate: class {
+    func croppingView(holeFrameDidChange cropingView: CroppingView, holeFrame: CGRect)
+}
+
 struct TouchState {
     let trackingTouch: UITouch
     let firstTouchLocation: CGPoint
@@ -36,9 +40,11 @@ struct TouchState {
 class CroppingView: UIView {
     private lazy var holedView = UIView(frame: self.bounds)
     private lazy var holeView = GridView(frame: self.holeFrame)
+    weak var delegate: CroppingViewDelegate? = nil
     
     var holeFrame: CGRect = CGRect.zero {
         didSet {
+            delegate?.croppingView(holeFrameDidChange: self, holeFrame: holeFrame)
             self.setNeedsLayout()
         }
     }

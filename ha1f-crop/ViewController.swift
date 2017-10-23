@@ -13,7 +13,7 @@ class ViewController: UIViewController {
     private lazy var imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
-        imageView.backgroundColor = .black
+        imageView.backgroundColor = .red
         imageView.image = #imageLiteral(resourceName: "sample.png")
         return imageView
     }()
@@ -30,7 +30,15 @@ class ViewController: UIViewController {
         return scrollView
     }()
     
-    private lazy var croppingView = CroppingView(frame: self.view.bounds)
+    private lazy var croppingView: CroppingView = {
+        let view = CroppingView(frame: self.view.bounds)
+        view.isResizingEnabled = true
+        view.delegate = self
+        return view
+    }()
+    
+    fileprivate var scrollViewHeightConstraint: NSLayoutConstraint?
+    fileprivate var scrollViewWidthConstraint: NSLayoutConstraint?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,13 +57,9 @@ class ViewController: UIViewController {
             ])
         
         let holeSize = CGRect(origin: .zero, size: imageView.sizeThatFits(view.bounds.size)).insetBy(dx: 50, dy: 50).size
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            scrollView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            scrollView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            scrollView.widthAnchor.constraint(equalToConstant: holeSize.width),
-            scrollView.heightAnchor.constraint(equalToConstant: holeSize.height)
-            ])
+        scrollView.frame = CGRect(origin: .zero, size: holeSize)
+        scrollView.center = view.center
+        croppingView.holeFrame = scrollView.frame.offsetBy(dx: -croppingView.frame.minX, dy: -croppingView.frame.minY)
         
         imageView.frame = CGRect(origin: .zero, size: holeSize)
         
@@ -72,11 +76,12 @@ class ViewController: UIViewController {
         button.addTarget(self, action: #selector(self.crop), for: .touchUpInside)
     }
     
-    override func viewDidLayoutSubviews() {
-        // scrollView position is equal to hole
-        // TODO: adjust scrollView size to holeFrame
-        croppingView.holeFrame = scrollView.frame
-            .offsetBy(dx: -croppingView.frame.minX, dy: -croppingView.frame.minY)
+    private func resetHole() {
+        let holeSize = CGRect(origin: .zero, size: imageView.sizeThatFits(view.bounds.size)).insetBy(dx: 50, dy: 50).size
+        self.scrollViewWidthConstraint?.constant = holeSize.width
+        self.scrollViewHeightConstraint?.constant = holeSize.height
+        imageView.frame = CGRect(origin: .zero, size: holeSize)
+        view.setNeedsLayout()
     }
     
     @objc func crop() {
@@ -92,6 +97,15 @@ class ViewController: UIViewController {
         let croppedImage = image.cropped(to: scaledRect)
         imageView.image = croppedImage
         scrollView.setZoomScale(1.0, animated: false)
+        resetHole()
+    }
+}
+
+extension ViewController: CroppingViewDelegate {
+    func croppingView(holeFrameDidChange cropingView: CroppingView, holeFrame: CGRect) {
+//        scrollViewWidthConstraint?.constant = holeFrame.width
+//        scrollViewHeightConstraint?.constant = holeFrame.height
+        scrollView.frame = holeFrame.offsetBy(dx: croppingView.frame.minX, dy: croppingView.frame.minY)
     }
 }
 
