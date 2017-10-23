@@ -36,9 +36,6 @@ class ViewController: UIViewController {
         view.delegate = self
         return view
     }()
-    
-    fileprivate var scrollViewHeightConstraint: NSLayoutConstraint?
-    fileprivate var scrollViewWidthConstraint: NSLayoutConstraint?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -56,12 +53,7 @@ class ViewController: UIViewController {
             croppingView.leftAnchor.constraint(equalTo: view.leftAnchor)
             ])
         
-        let holeSize = CGRect(origin: .zero, size: imageView.sizeThatFits(view.bounds.size)).insetBy(dx: 50, dy: 50).size
-        scrollView.frame = CGRect(origin: .zero, size: holeSize)
-        scrollView.center = view.center
-        croppingView.holeFrame = scrollView.frame.offsetBy(dx: -croppingView.frame.minX, dy: -croppingView.frame.minY)
-        
-        imageView.frame = CGRect(origin: .zero, size: holeSize)
+        resetHole()
         
         let button = UIButton(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
         button.setTitle("CROP!", for: .normal)
@@ -78,9 +70,10 @@ class ViewController: UIViewController {
     
     private func resetHole() {
         let holeSize = CGRect(origin: .zero, size: imageView.sizeThatFits(view.bounds.size)).insetBy(dx: 50, dy: 50).size
-        self.scrollViewWidthConstraint?.constant = holeSize.width
-        self.scrollViewHeightConstraint?.constant = holeSize.height
         imageView.frame = CGRect(origin: .zero, size: holeSize)
+        scrollView.frame = CGRect(origin: .zero, size: holeSize)
+        scrollView.center = view.center
+        croppingView.holeFrame = scrollView.frame.offsetBy(dx: -croppingView.frame.minX, dy: -croppingView.frame.minY)
         view.setNeedsLayout()
     }
     
