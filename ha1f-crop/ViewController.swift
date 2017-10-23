@@ -50,10 +50,10 @@ class ViewController: UIViewController {
         
         croppingView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            croppingView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            croppingView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            croppingView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor),
-            croppingView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor)
+            croppingView.topAnchor.constraint(equalTo: view.topAnchor),
+            croppingView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            croppingView.rightAnchor.constraint(equalTo: view.rightAnchor),
+            croppingView.leftAnchor.constraint(equalTo: view.leftAnchor)
             ])
         
         let holeSize = CGRect(origin: .zero, size: imageView.sizeThatFits(view.bounds.size)).insetBy(dx: 50, dy: 50).size
@@ -102,10 +102,11 @@ class ViewController: UIViewController {
 }
 
 extension ViewController: CroppingViewDelegate {
+    // TODO: shouldChangeで最大サイズを設定
     func croppingView(holeFrameDidChange cropingView: CroppingView, holeFrame: CGRect) {
-//        scrollViewWidthConstraint?.constant = holeFrame.width
-//        scrollViewHeightConstraint?.constant = holeFrame.height
         scrollView.frame = holeFrame.offsetBy(dx: croppingView.frame.minX, dy: croppingView.frame.minY)
+        // I don't know why, but if this line is not present, we cannot scroll after resizing
+        scrollView.setZoomScale(scrollView.zoomScale, animated: false)
     }
 }
 
