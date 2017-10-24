@@ -55,9 +55,6 @@ class ViewController: UIViewController {
         let view = CroppingView(frame: self.view.bounds)
         view.isResizingEnabled = false
         view.delegate = self
-        /// croppingView.holeFrame = UIImage.circle(size: croppingView.holeFrame.size, color: .black)?.withSettingBackground(color: .white)
-        /// にすると円形クロップ（但しholeFrame確定後でないとだめ）
-        view.holeMask = #imageLiteral(resourceName: "mask.png")
         return view
     }()
 
@@ -101,6 +98,8 @@ class ViewController: UIViewController {
     /// Set image to imageView, and resizes hole to fit properly in the screen
     func setImage(_ image: UIImage) {
         scrollView.setZoomScale(1.0, animated: false)
+        
+        // Layout imageView
         imageView.image = image
         let preferredSize = imageView.sizeThatFits(view.bounds.size)
         let preferredRect = CGRect(origin: .zero, size: preferredSize)
@@ -113,8 +112,11 @@ class ViewController: UIViewController {
             holeSize = preferredSize
         }
         imageView.frame = CGRect(origin: .zero, size: holeSize)
+        
+        // Set holeFrame to cover imageView
         let holeFrame = CGRect(origin: .zero, size: holeSize).withCentering(in: croppingView)
         croppingView.holeFrame = holeFrame
+        croppingView.holeMask = UIImage.circle(size: croppingView.holeFrame.size, color: .black, backgroundColor: .white)
         setHoleFrame(holeFrame)
         view.setNeedsLayout()
     }
