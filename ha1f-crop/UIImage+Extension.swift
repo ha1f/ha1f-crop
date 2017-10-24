@@ -18,16 +18,28 @@ extension CGFloat {
 // https://github.com/tomohisa/UIImage-Trim
 extension UIImage {
     func cropped(to rect: CGRect) -> UIImage? {
-        guard let imgRef = cgImage?.cropping(to: rect) else {
+        var cgImage: CGImage? = self.cgImage
+        if cgImage == nil {
+            if let ciImage = self.ciImage ?? CIImage(image: self) {
+                let context = CIContext(options: nil)
+                cgImage = context.createCGImage(ciImage, from: ciImage.extent)
+            }
+        }
+        guard let unwrappedCGImage = cgImage else {
+            print("converting cgimage error")
+            return nil
+        }
+        guard let imgRef = unwrappedCGImage.cropping(to: rect) else {
+            print("cropping error")
             return nil
         }
         return UIImage(cgImage: imgRef, scale: scale, orientation: imageOrientation)
     }
     
     /// https://stackoverflow.com/questions/40389215/swift-rotate-an-image-then-zoom-in-and-crop-to-keep-width-height-aspect-ratio
-    func rotateAndCropped(degree: CGFloat) -> UIImage? {
+    func rotatedAndCropped(angle: CGFloat) -> UIImage? {
         let ciImage = self.ciImage ?? CIImage(image: self)
-        let rotated = ciImage?.applyingFilter("CIStraightenFilter", parameters: [kCIInputAngleKey: degree.degreesToRadians()])
+        let rotated = ciImage?.applyingFilter("CIStraightenFilter", parameters: [kCIInputAngleKey: -angle])
         return rotated.map { UIImage(ciImage: $0) }
     }
     

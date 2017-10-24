@@ -107,7 +107,7 @@ class ViewController: UIViewController {
     
     @objc func onCropButtonTapped() {
         if let result = crop() {
-            setImage(result)
+            originalImage = result
         }
     }
     
@@ -135,6 +135,7 @@ class ViewController: UIViewController {
         
         // Layout imageView
         imageView.image = image
+        
         let preferredSize = imageView.sizeThatFits(view.bounds.size)
         let preferredRect = CGRect(origin: .zero, size: preferredSize)
         let holeSize: CGSize
@@ -149,22 +150,29 @@ class ViewController: UIViewController {
         
         // Set holeFrame to cover imageView
         if fitHole {
+            
             let holeFrame = CGRect(origin: .zero, size: holeSize).withCentering(in: croppingView)
             croppingView.holeFrame = holeFrame
             croppingView.holeMask = UIImage.circle(size: croppingView.holeFrame.size, color: .black, backgroundColor: .white)
+            setHoleFrame()
         }
-        setHoleFrame()
+        
+        imageView.center = CGPoint(x: croppingView.holeFrame.width / 2, y: croppingView.holeFrame.height / 2)
+        scrollView.contentSize = croppingView.holeFrame.size
         
         view.setNeedsLayout()
+        
     }
     
     private func setHoleFrame() {
-        scrollView.actualFrame = croppingView.holeFrame.offsetBy(dx: croppingView.frame.minX - scrollView.frame.minX, dy: croppingView.frame.minY - scrollView.frame.minY)
+        scrollView.actualFrame = croppingView.holeFrame
+            .offsetBy(dx: croppingView.frame.minX - scrollView.frame.minX, dy: croppingView.frame.minY - scrollView.frame.minY)
         scrollView.setZoomScale(scrollView.zoomScale, animated: false)
     }
     
     func crop() -> UIImage? {
         guard let image = imageView.image else {
+            debugPrint("no image")
             return nil
         }
         let visibleRect = imageView.convert(scrollView.actualFrame.offsetBy(dx: scrollView.bounds.minX, dy: scrollView.bounds.minY), from: scrollView)
@@ -175,6 +183,7 @@ class ViewController: UIViewController {
                                 width: visibleRect.width * scale,
                                 height: visibleRect.height * scale)
         guard let croppedImage = image.cropped(to: scaledRect) else {
+            debugPrint("some error occured in cropped")
             return nil
         }
         if let mask = croppingView.holeMask {

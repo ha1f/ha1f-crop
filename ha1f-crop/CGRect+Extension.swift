@@ -27,6 +27,10 @@ extension CGRect {
         return CGRect(origin: center, size: size)
     }
     
+    var center: CGPoint {
+        return CGPoint(x: midX, y: midY)
+    }
+    
     // TODO: refactor to single call
     func withMovingCorner(of position: CornerPosition, to point: CGPoint) -> CGRect {
         switch position {
