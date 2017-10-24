@@ -9,6 +9,9 @@
 import UIKit
 
 extension UIScrollView {
+    /// Used for scrollView to works as if scrollView frame is actualFrame.
+    /// The advantage of thissolution is to extend scrollable area.
+    /// Note: Need to set scrollView.contentInsetAdjustmentBehavior = .never to work properly.
     var actualFrame: CGRect {
         set {
             let top = newValue.minY
@@ -32,7 +35,6 @@ class ViewController: UIViewController {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
         imageView.backgroundColor = .red
-        imageView.image = #imageLiteral(resourceName: "sample.png")
         return imageView
     }()
     
@@ -68,7 +70,7 @@ class ViewController: UIViewController {
         croppingView.frame = view.bounds
         scrollView.frame = view.bounds
         
-        resetHole()
+        setImage(#imageLiteral(resourceName: "sample.png"))
         
         let button = UIButton(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
         button.setTitle("CROP!", for: .normal)
@@ -83,27 +85,29 @@ class ViewController: UIViewController {
         button.addTarget(self, action: #selector(self.crop), for: .touchUpInside)
     }
     
-    private func resetHole() {
-        let preferredSize = imageView.sizeThatFits(view.bounds.size)
+    /// Set image to imageView, and resizes hole to fit properly in the screen
+    func setImage(_ image: UIImage) {
+        imageView.image = image
+        let preferredSize = imageView.sizeThatFits(croppingView.bounds.size)
         let preferredRect = CGRect(origin: .zero, size: preferredSize)
         let holeSize: CGSize
-        if preferredRect.width > (view.bounds.width - 50) {
+        if preferredRect.width > (croppingView.bounds.width - 50) {
             holeSize = preferredRect.insetBy(dx: 50, dy: 50 / preferredSize.width * preferredSize.height).size
-        } else if preferredRect.height > (view.bounds.height - 50) {
+        } else if preferredRect.height > (croppingView.bounds.height - 50) {
             holeSize = preferredRect.insetBy(dx: 50 / preferredSize.height * preferredSize.width, dy: 50 / preferredSize.width * preferredSize.height).size
         } else {
             holeSize = preferredSize
         }
         imageView.frame = CGRect(origin: .zero, size: holeSize)
-        let holeFrame = CGRect(origin: .zero, size: holeSize).withCentering(in: view)
+        let holeFrame = CGRect(origin: .zero, size: holeSize).withCentering(in: croppingView)
         croppingView.holeFrame = holeFrame
         setHoleFrame(holeFrame)
-        scrollView.setZoomScale(1.0, animated: false)
         view.setNeedsLayout()
     }
     
     private func setHoleFrame(_ holeFrame: CGRect) {
         scrollView.actualFrame = croppingView.holeFrame.offsetBy(dx: croppingView.frame.minX - scrollView.frame.minX, dy: croppingView.frame.minY - scrollView.frame.minY)
+        scrollView.setZoomScale(scrollView.zoomScale, animated: false)
     }
     
     @objc func crop() {
@@ -117,10 +121,10 @@ class ViewController: UIViewController {
                                 y: visibleRect.minY * scale,
                                 width: visibleRect.width * scale,
                                 height: visibleRect.height * scale)
-        let croppedImage = image.cropped(to: scaledRect)
-        imageView.image = croppedImage
+        if let croppedImage = image.cropped(to: scaledRect) {
+            setImage(croppedImage)
+        }
         scrollView.setZoomScale(1.0, animated: false)
-        resetHole()
     }
 }
 
@@ -128,8 +132,6 @@ extension ViewController: CroppingViewDelegate {
     // TODO: shouldChangeで最大サイズを設定
     func croppingView(holeFrameDidChange cropingView: CroppingView, holeFrame: CGRect) {
         setHoleFrame(holeFrame)
-        // I don't know why, but if this line is not present, we cannot scroll after resizing
-        scrollView.setZoomScale(scrollView.zoomScale, animated: false)
     }
 }
 

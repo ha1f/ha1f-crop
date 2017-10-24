@@ -77,7 +77,7 @@ class CroppingView: UIView {
         addSubview(holeView)
         
         /// resizing
-        [lt, lb, rt, rb].forEach { view in
+        [ltAnchor, lbAnchor, rtAnchor, rbAnchor].forEach { view in
             holedView.addSubview(view)
         }
     }
@@ -86,10 +86,10 @@ class CroppingView: UIView {
     static let anchorWidth: CGFloat = 30
     static let anchorLineWidth: CGFloat = 3
     
-    private let lt = _buildAnchorView()
-    private let lb = _buildAnchorView()
-    private let rt = _buildAnchorView()
-    private let rb = _buildAnchorView()
+    private let ltAnchor = _buildAnchorView()
+    private let lbAnchor = _buildAnchorView()
+    private let rtAnchor = _buildAnchorView()
+    private let rbAnchor = _buildAnchorView()
     
     var isResizingEnabled: Bool = false {
         didSet {
@@ -107,13 +107,13 @@ class CroppingView: UIView {
     
     private func _cornerPosition(of cornerView: UIView) -> CornerPosition? {
         switch cornerView {
-        case lt:
+        case ltAnchor:
             return .topLeft
-        case lb:
+        case lbAnchor:
             return .bottomLeft
-        case rt:
+        case rtAnchor:
             return .topRight
-        case rb:
+        case rbAnchor:
             return .bottomRight
         default:
             return nil
@@ -122,10 +122,10 @@ class CroppingView: UIView {
     
     private func _updateCornerViewLayouts() {
         let cornerViewOffset = CroppingView.anchorWidth / 2 - CroppingView.anchorLineWidth
-        lt.center = holeFrame.getPoint(of: .topLeft).offsetBy(dx: cornerViewOffset, dy: cornerViewOffset)
-        lb.center = holeFrame.getPoint(of: .bottomLeft).offsetBy(dx: cornerViewOffset, dy: -cornerViewOffset)
-        rt.center = holeFrame.getPoint(of: .topRight).offsetBy(dx: -cornerViewOffset, dy: cornerViewOffset)
-        rb.center = holeFrame.getPoint(of: .bottomRight).offsetBy(dx: -cornerViewOffset, dy: -cornerViewOffset)
+        ltAnchor.center = holeFrame.getPoint(of: .topLeft).offsetBy(dx: cornerViewOffset, dy: cornerViewOffset)
+        lbAnchor.center = holeFrame.getPoint(of: .bottomLeft).offsetBy(dx: cornerViewOffset, dy: -cornerViewOffset)
+        rtAnchor.center = holeFrame.getPoint(of: .topRight).offsetBy(dx: -cornerViewOffset, dy: cornerViewOffset)
+        rbAnchor.center = holeFrame.getPoint(of: .bottomRight).offsetBy(dx: -cornerViewOffset, dy: -cornerViewOffset)
     }
     
     private func _isAnchorView(_ view: UIView) -> Bool {
