@@ -17,8 +17,6 @@ extension UIScrollView {
             let right = bounds.width - newValue.maxX
             self.contentInset = UIEdgeInsets(top: top, left: left, bottom: bottom, right: right)
             self.scrollIndicatorInsets = self.contentInset
-            print("contentInset", self.contentInset)
-            print("origin", self.bounds.origin)
         }
         get {
             let width = bounds.width - (contentInset.left + contentInset.right)
@@ -53,7 +51,7 @@ class ViewController: UIViewController {
     
     private lazy var croppingView: CroppingView = {
         let view = CroppingView(frame: self.view.bounds)
-        view.isResizingEnabled = true
+        view.isResizingEnabled = false
         view.delegate = self
         return view
     }()
