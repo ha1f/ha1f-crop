@@ -34,7 +34,7 @@ class ViewController: UIViewController {
     private lazy var imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
-        imageView.backgroundColor = .clear
+        imageView.backgroundColor = .red
         return imageView
     }()
     
@@ -48,6 +48,10 @@ class ViewController: UIViewController {
         scrollView.showsHorizontalScrollIndicator = false
         scrollView.center = view.center
         scrollView.clipsToBounds = false
+        
+        let gestureRecognizer = UIRotationGestureRecognizer()
+        gestureRecognizer.addTarget(self, action: #selector(self.onRotated(gestureRecognizer:)))
+        scrollView.addGestureRecognizer(gestureRecognizer)
         return scrollView
     }()
     
@@ -70,9 +74,21 @@ class ViewController: UIViewController {
         croppingView.frame = view.bounds
         scrollView.frame = view.bounds
         
-        setImage(#imageLiteral(resourceName: "sample.png"))
+        originalImage = #imageLiteral(resourceName: "sample.png")
         
         setupButton()
+    }
+    
+    var originalImage = #imageLiteral(resourceName: "sample.png") {
+        didSet {
+            currentRotation = 0.0
+            setImage(originalImage)
+        }
+    }
+    var currentRotation: CGFloat = 0.0 {
+        didSet {
+            setImage(originalImage.rotated(angle: currentRotation)!, fitHole: false)
+        }
     }
     
     private func setupButton() {
@@ -95,8 +111,26 @@ class ViewController: UIViewController {
         }
     }
     
+    private var initialTransform: CGAffineTransform = CGAffineTransform.identity
+    @objc func onRotated(gestureRecognizer: UIRotationGestureRecognizer) {
+        switch gestureRecognizer.state {
+        case .began:
+            initialTransform = imageView.transform
+            imageView.transform = initialTransform.rotated(by: gestureRecognizer.rotation)
+        case .changed:
+            imageView.transform = initialTransform.rotated(by: gestureRecognizer.rotation)
+        case .ended:
+            currentRotation += gestureRecognizer.rotation
+            imageView.transform = CGAffineTransform.identity
+        case .failed, .cancelled:
+            imageView.transform = initialTransform
+        case .possible:
+            break
+        }
+    }
+    
     /// Set image to imageView, and resizes hole to fit properly in the screen
-    func setImage(_ image: UIImage) {
+    func setImage(_ image: UIImage, fitHole: Bool = true) {
         scrollView.setZoomScale(1.0, animated: false)
         
         // Layout imageView
@@ -114,14 +148,17 @@ class ViewController: UIViewController {
         imageView.frame = CGRect(origin: .zero, size: holeSize)
         
         // Set holeFrame to cover imageView
-        let holeFrame = CGRect(origin: .zero, size: holeSize).withCentering(in: croppingView)
-        croppingView.holeFrame = holeFrame
-        croppingView.holeMask = UIImage.circle(size: croppingView.holeFrame.size, color: .black, backgroundColor: .white)
-        setHoleFrame(holeFrame)
+        if fitHole {
+            let holeFrame = CGRect(origin: .zero, size: holeSize).withCentering(in: croppingView)
+            croppingView.holeFrame = holeFrame
+            croppingView.holeMask = UIImage.circle(size: croppingView.holeFrame.size, color: .black, backgroundColor: .white)
+        }
+        setHoleFrame()
+        
         view.setNeedsLayout()
     }
     
-    private func setHoleFrame(_ holeFrame: CGRect) {
+    private func setHoleFrame() {
         scrollView.actualFrame = croppingView.holeFrame.offsetBy(dx: croppingView.frame.minX - scrollView.frame.minX, dy: croppingView.frame.minY - scrollView.frame.minY)
         scrollView.setZoomScale(scrollView.zoomScale, animated: false)
     }
@@ -151,7 +188,7 @@ class ViewController: UIViewController {
 extension ViewController: CroppingViewDelegate {
     // TODO: shouldChangeで最大サイズを設定
     func croppingView(holeFrameDidChange cropingView: CroppingView, holeFrame: CGRect) {
-        setHoleFrame(holeFrame)
+        setHoleFrame()
     }
 }
 

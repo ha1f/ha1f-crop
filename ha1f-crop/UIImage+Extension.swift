@@ -32,8 +32,8 @@ extension UIImage {
     }
     
     /// http://blogs.innovationm.com/image-croprotateresize-handling-in-ios/
-    func rotated(image: UIImage, angle: CGFloat, flipVertical: CGFloat, flipHorizontal: CGFloat) -> UIImage? {
-        let ciImage = CIImage(image: image)
+    func rotated(angle: CGFloat, flipVertical: CGFloat = 0.0, flipHorizontal: CGFloat = 0.0) -> UIImage? {
+        let ciImage = self.ciImage ?? CIImage(image: self)
         
         guard let filter = CIFilter(name: "CIAffineTransform") else {
             return nil
