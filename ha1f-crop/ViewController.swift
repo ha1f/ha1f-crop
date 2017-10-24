@@ -17,6 +17,8 @@ extension UIScrollView {
             let right = bounds.width - newValue.maxX
             self.contentInset = UIEdgeInsets(top: top, left: left, bottom: bottom, right: right)
             self.scrollIndicatorInsets = self.contentInset
+            print("contentInset", self.contentInset)
+            print("origin", self.bounds.origin)
         }
         get {
             let width = bounds.width - (contentInset.left + contentInset.right)
@@ -38,6 +40,7 @@ class ViewController: UIViewController {
     
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
+        scrollView.contentInsetAdjustmentBehavior = .never
         scrollView.delegate = self
         scrollView.minimumZoomScale = 1.0
         scrollView.maximumZoomScale = 5.0
@@ -107,10 +110,14 @@ class ViewController: UIViewController {
         }
         imageView.frame = CGRect(origin: .zero, size: holeSize)
         let holeFrame = CGRect(origin: .zero, size: holeSize).withCentering(in: view)
-        scrollView.actualFrame = holeFrame
         croppingView.holeFrame = holeFrame
+        setHoleFrame(holeFrame)
         scrollView.setZoomScale(1.0, animated: false)
         view.setNeedsLayout()
+    }
+    
+    private func setHoleFrame(_ holeFrame: CGRect) {
+        scrollView.actualFrame = croppingView.holeFrame.offsetBy(dx: croppingView.frame.minX - scrollView.frame.minX, dy: croppingView.frame.minY - scrollView.frame.minY)
     }
     
     @objc func crop() {
@@ -121,7 +128,6 @@ class ViewController: UIViewController {
         let visibleRect = imageView.convert(scrollView.actualFrame.offsetBy(dx: scrollView.bounds.minX, dy: scrollView.bounds.minY), from: scrollView)
         
         print("visible", visibleRect)
-        print("offset", scrollView.contentOffset)
         print("inset", scrollView.contentInset)
         let actualImageViewWidth = imageView.frame.width / scrollView.zoomScale
         let scale: CGFloat = image.size.width / actualImageViewWidth
@@ -140,7 +146,7 @@ class ViewController: UIViewController {
 extension ViewController: CroppingViewDelegate {
     // TODO: shouldChangeで最大サイズを設定
     func croppingView(holeFrameDidChange cropingView: CroppingView, holeFrame: CGRect) {
-        scrollView.actualFrame = cropingView.holeFrame
+        setHoleFrame(holeFrame)
         // I don't know why, but if this line is not present, we cannot scroll after resizing
         scrollView.setZoomScale(scrollView.zoomScale, animated: false)
     }
