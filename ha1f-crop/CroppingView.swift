@@ -39,8 +39,11 @@ struct TouchState {
 
 class CroppingView: UIView {
     private lazy var holedView = UIView(frame: self.bounds)
+    private lazy var holeMaskView = UIView(frame: self.holeFrame)
     private lazy var holeView = GridView(frame: self.holeFrame)
     weak var delegate: CroppingViewDelegate? = nil
+    
+    static let dimViewColor = UIColor(displayP3Red: 0, green: 0, blue: 0, alpha: 0.5)
     
     var holeFrame: CGRect = CGRect.zero {
         didSet {
@@ -49,10 +52,22 @@ class CroppingView: UIView {
         }
     }
     
+    var holeMask: UIImage? = nil {
+        didSet {
+            if let maskImage = holeMask {
+                self.holeMaskView.isHidden = false
+                self.holeMaskView.mask(image: maskImage)
+            } else {
+                self.holeMaskView.isHidden = true
+            }
+        }
+    }
+    
     override func layoutSubviews() {
         super.layoutSubviews()
         self.holedView.frame = self.bounds
         self.holeView.frame = self.holeFrame
+        self.holeMaskView.frame = self.holeFrame
         _updateCornerViewLayouts()
         holedView.mask(withoutRect: holeFrame)
     }
@@ -72,9 +87,12 @@ class CroppingView: UIView {
     private func _setup() {
         holeView.isUserInteractionEnabled = false
         holedView.isUserInteractionEnabled = self.isResizingEnabled
-        holedView.backgroundColor = UIColor(displayP3Red: 0, green: 0, blue: 0, alpha: 0.5)
+        holedView.backgroundColor = CroppingView.dimViewColor
+        holeMaskView.backgroundColor = CroppingView.dimViewColor
         addSubview(holedView)
+        // addSubview(holeMaskView)
         addSubview(holeView)
+        holeMask = nil
         
         /// resizing
         [ltAnchor, lbAnchor, rtAnchor, rbAnchor].forEach { view in

@@ -34,7 +34,7 @@ class ViewController: UIViewController {
     private lazy var imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
-        imageView.backgroundColor = .white
+        imageView.backgroundColor = .clear
         return imageView
     }()
     
@@ -55,14 +55,13 @@ class ViewController: UIViewController {
         let view = CroppingView(frame: self.view.bounds)
         view.isResizingEnabled = false
         view.delegate = self
+        view.holeMask = #imageLiteral(resourceName: "mask.png")
         return view
     }()
-    
-    var mask: UIImage? = #imageLiteral(resourceName: "mask.png")
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = .black
         
         view.addSubview(scrollView)
         view.addSubview(croppingView)
@@ -137,7 +136,7 @@ class ViewController: UIViewController {
         guard let croppedImage = image.cropped(to: scaledRect) else {
             return nil
         }
-        if let mask = mask {
+        if let mask = croppingView.holeMask {
             return croppedImage.masked(with: mask)
         } else {
             return croppedImage
