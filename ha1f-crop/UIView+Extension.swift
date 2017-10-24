@@ -18,15 +18,12 @@ extension UIView {
         self.layer.mask = maskLayer
     }
     
-    func mask(withoutRect windowRect: CGRect) {
-        let path = UIBezierPath(rect: self.bounds)
-        path.append(UIBezierPath(rect: windowRect))
-        self.mask(path: path)
-    }
-    
-    func mask(rect windowRect: CGRect) {
+    func mask(rect windowRect: CGRect, inverse: Bool = false) {
         let path = UIBezierPath(rect: windowRect)
-        self.mask(path: path)
+        if inverse {
+            path.append(UIBezierPath(rect: self.bounds))
+        }
+        self.mask(path: path, fillRule: kCAFillRuleEvenOdd)
     }
     
     func mask(image: UIImage) {

@@ -43,7 +43,7 @@ class CroppingView: UIView {
     private lazy var holeView = GridView(frame: self.holeFrame)
     weak var delegate: CroppingViewDelegate? = nil
     
-    static let dimViewColor = UIColor(displayP3Red: 0, green: 0, blue: 0, alpha: 0.5)
+    static let dimViewColor = UIColor(displayP3Red: 0, green: 0, blue: 0, alpha: 0.9)
     
     var holeFrame: CGRect = CGRect.zero {
         didSet {
@@ -54,12 +54,16 @@ class CroppingView: UIView {
     
     var holeMask: UIImage? = nil {
         didSet {
-            if let maskImage = holeMask {
-                self.holeMaskView.isHidden = false
-                self.holeMaskView.mask(image: maskImage)
-            } else {
-                self.holeMaskView.isHidden = true
-            }
+            _updateHoleMask()
+        }
+    }
+    
+    private func _updateHoleMask() {
+        if let maskImage = holeMask?.blacked(inverse: true) {
+            self.holeMaskView.isHidden = false
+            self.holeMaskView.mask(image: maskImage)
+        } else {
+            self.holeMaskView.isHidden = true
         }
     }
     
@@ -69,7 +73,8 @@ class CroppingView: UIView {
         self.holeView.frame = self.holeFrame
         self.holeMaskView.frame = self.holeFrame
         _updateCornerViewLayouts()
-        holedView.mask(withoutRect: holeFrame)
+        holedView.mask(rect: holeFrame, inverse: true)
+        _updateHoleMask()
     }
     
     // MARK: Initializers
@@ -90,14 +95,14 @@ class CroppingView: UIView {
         holedView.backgroundColor = CroppingView.dimViewColor
         holeMaskView.backgroundColor = CroppingView.dimViewColor
         addSubview(holedView)
-        // addSubview(holeMaskView)
+        addSubview(holeMaskView)
         addSubview(holeView)
         holeMask = nil
         
         /// resizing
         [ltAnchor, lbAnchor, rtAnchor, rbAnchor].forEach { view in
             holedView.addSubview(view)
-            holedView.isHidden = !isResizingEnabled
+            view.isHidden = !isResizingEnabled
         }
     }
     

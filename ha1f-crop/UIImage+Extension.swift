@@ -64,6 +64,53 @@ extension UIImage {
         return UIImage(cgImage: cgImage)
     }
     
+    static func empty(size: CGSize, color: UIColor = .clear) -> UIImage? {
+        UIGraphicsBeginImageContext(size)
+        defer {
+            UIGraphicsEndImageContext()
+        }
+        guard let context = UIGraphicsGetCurrentContext() else {
+            return nil
+        }
+        let frame = CGRect(origin: .zero, size: size)
+        context.clear(frame)
+        context.setFillColor(color.cgColor)
+        context.fill(frame)
+        return UIGraphicsGetImageFromCurrentImageContext()
+    }
+    
+    func withSettingBackground(color: UIColor) -> UIImage? {
+        UIGraphicsBeginImageContext(size)
+        defer {
+            UIGraphicsEndImageContext()
+        }
+        guard let context = UIGraphicsGetCurrentContext() else {
+            return nil
+        }
+        let frame = CGRect(origin: .zero, size: size)
+        context.clear(frame)
+        context.setFillColor(color.cgColor)
+        context.fill(frame)
+        context.draw(self.cgImage!, in: frame)
+        return UIGraphicsGetImageFromCurrentImageContext()
+    }
+    
+    /// black or transparent
+    func blacked(inverse: Bool = false) -> UIImage? {
+        if inverse {
+            guard let mask = UIImage.empty(size: size, color: .white)?.masked(with: self)?.withSettingBackground(color: .black) else {
+                return nil
+            }
+            return UIImage.empty(size: size, color: .black)?.masked(with: mask)
+        } else {
+            return UIImage.empty(size: size, color: .black)?.masked(with: self)
+        }
+    }
+    
+    func withTransparentWhite() -> UIImage? {
+        return self.masked(with: self)
+    }
+    
     func masked(with image: UIImage) -> UIImage? {
         guard let maskRef = image.cgImage,
             let ref = cgImage,
