@@ -79,6 +79,7 @@ class CroppingView: UIView {
         /// resizing
         [ltAnchor, lbAnchor, rtAnchor, rbAnchor].forEach { view in
             holedView.addSubview(view)
+            holedView.isHidden = !isResizingEnabled
         }
     }
     
@@ -95,6 +96,9 @@ class CroppingView: UIView {
         didSet {
             self.isUserInteractionEnabled = isResizingEnabled
             holedView.isUserInteractionEnabled = isResizingEnabled
+            [ltAnchor, lbAnchor, rtAnchor, rbAnchor].forEach { view in
+                view.isHidden = !isResizingEnabled
+            }
         }
     }
     
