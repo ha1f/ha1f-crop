@@ -8,6 +8,24 @@
 
 import UIKit
 
+extension UIScrollView {
+    var actualFrame: CGRect {
+        set {
+            let top = newValue.minY
+            let left = newValue.minX
+            let bottom = bounds.height - newValue.maxY
+            let right = bounds.width - newValue.maxX
+            self.contentInset = UIEdgeInsets(top: top, left: left, bottom: bottom, right: right)
+            self.scrollIndicatorInsets = self.contentInset
+        }
+        get {
+            let width = bounds.width - (contentInset.left + contentInset.right)
+            let height = bounds.height - (contentInset.top + contentInset.bottom)
+            return CGRect(origin: CGPoint(x: contentInset.left, y: contentInset.top), size: CGSize(width: width, height: height))
+        }
+    }
+}
+
 class ViewController: UIViewController {
     
     private lazy var imageView: UIImageView = {
@@ -52,6 +70,14 @@ class ViewController: UIViewController {
             croppingView.rightAnchor.constraint(equalTo: view.rightAnchor),
             croppingView.leftAnchor.constraint(equalTo: view.leftAnchor)
             ])
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.frame = view.bounds
+        NSLayoutConstraint.activate([
+            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            scrollView.rightAnchor.constraint(equalTo: view.rightAnchor),
+            scrollView.leftAnchor.constraint(equalTo: view.leftAnchor)
+            ])
         
         resetHole()
         
@@ -79,11 +105,11 @@ class ViewController: UIViewController {
         } else {
             holeSize = preferredSize
         }
-        print("hole", holeSize, view.bounds.size, imageView.sizeThatFits(view.bounds.size), preferredSize)
         imageView.frame = CGRect(origin: .zero, size: holeSize)
-        scrollView.frame = CGRect(origin: .zero, size: holeSize)
-        scrollView.center = view.center
-        croppingView.holeFrame = scrollView.frame.offsetBy(dx: -croppingView.frame.minX, dy: -croppingView.frame.minY)
+        let holeFrame = CGRect(origin: .zero, size: holeSize).withCentering(in: view)
+        scrollView.actualFrame = holeFrame
+        croppingView.holeFrame = holeFrame
+        scrollView.setZoomScale(1.0, animated: false)
         view.setNeedsLayout()
     }
     
@@ -91,17 +117,20 @@ class ViewController: UIViewController {
         guard let image = imageView.image else {
             return
         }
-        let visibleRect = imageView.convert(scrollView.bounds, from: scrollView)
+        print("actual", scrollView.actualFrame)
+        let visibleRect = imageView.convert(scrollView.actualFrame.offsetBy(dx: scrollView.bounds.minX, dy: scrollView.bounds.minY), from: scrollView)
+        
         print("visible", visibleRect)
-        let scale: CGFloat = image.size.width / (imageView.frame.width / scrollView.zoomScale)
+        print("offset", scrollView.contentOffset)
+        print("inset", scrollView.contentInset)
+        let actualImageViewWidth = imageView.frame.width / scrollView.zoomScale
+        let scale: CGFloat = image.size.width / actualImageViewWidth
         let scaledRect = CGRect(x: visibleRect.minX * scale,
                                 y: visibleRect.minY * scale,
                                 width: visibleRect.width * scale,
                                 height: visibleRect.height * scale)
         print("scaled", scaledRect)
-        print("image", image.size)
         let croppedImage = image.cropped(to: scaledRect)
-        print("cropped", croppedImage!.size)
         imageView.image = croppedImage
         scrollView.setZoomScale(1.0, animated: false)
         resetHole()
@@ -111,9 +140,7 @@ class ViewController: UIViewController {
 extension ViewController: CroppingViewDelegate {
     // TODO: shouldChangeで最大サイズを設定
     func croppingView(holeFrameDidChange cropingView: CroppingView, holeFrame: CGRect) {
-        let oldFrame = scrollView.frame
-        scrollView.frame = holeFrame.offsetBy(dx: croppingView.frame.minX, dy: croppingView.frame.minY)
-        scrollView.contentOffset = scrollView.contentOffset.offsetBy(dx: scrollView.frame.minX - oldFrame.minX, dy: scrollView.frame.minY - oldFrame.minY)
+        scrollView.actualFrame = cropingView.holeFrame
         // I don't know why, but if this line is not present, we cannot scroll after resizing
         scrollView.setZoomScale(scrollView.zoomScale, animated: false)
     }

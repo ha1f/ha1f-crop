@@ -22,6 +22,11 @@ extension CGRect {
         return CGRect(x: min(minX, value), y: minY, width: abs(value - minX), height: height)
     }
     
+    func withCentering(in superview: UIView) -> CGRect {
+        let center = CGPoint(x: (superview.bounds.width - width) / 2, y: (superview.bounds.height - height) / 2)
+        return CGRect(origin: center, size: size)
+    }
+    
     // TODO: refactor to single call
     func withMovingCorner(of position: CornerPosition, to point: CGPoint) -> CGRect {
         switch position {
