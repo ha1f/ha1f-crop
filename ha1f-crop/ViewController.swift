@@ -55,6 +55,8 @@ class ViewController: UIViewController {
         let view = CroppingView(frame: self.view.bounds)
         view.isResizingEnabled = false
         view.delegate = self
+        /// croppingView.holeFrame = UIImage.circle(size: croppingView.holeFrame.size, color: .black)?.withSettingBackground(color: .white)
+        /// にすると円形クロップ（但しholeFrame確定後でないとだめ）
         view.holeMask = #imageLiteral(resourceName: "mask.png")
         return view
     }()

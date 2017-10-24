@@ -79,6 +79,23 @@ extension UIImage {
         return UIGraphicsGetImageFromCurrentImageContext()
     }
     
+    static func circle(size: CGSize, color: UIColor) -> UIImage? {
+        UIGraphicsBeginImageContext(size)
+        defer {
+            UIGraphicsEndImageContext()
+        }
+        guard let context = UIGraphicsGetCurrentContext() else {
+            return nil
+        }
+        let frame = CGRect(origin: .zero, size: size)
+        context.clear(frame)
+        context.setFillColor(color.cgColor)
+        context.setLineWidth(0)
+        context.addEllipse(in: frame)
+        context.fillPath()
+        return UIGraphicsGetImageFromCurrentImageContext()
+    }
+    
     func withSettingBackground(color: UIColor) -> UIImage? {
         UIGraphicsBeginImageContext(size)
         defer {
