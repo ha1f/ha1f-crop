@@ -132,16 +132,12 @@ class CroppingView: UIView {
         rbAnchor.center = holeFrame.getPoint(of: .bottomRight).offsetBy(dx: -cornerViewOffset, dy: -cornerViewOffset)
     }
     
-    private func _isAnchorView(_ view: UIView) -> Bool {
-        return _cornerPosition(of: view) != nil
-    }
-    
     // Ignore user interaction except anchor
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         guard let view = super.hitTest(point, with: event) else {
             return nil
         }
-        guard _isAnchorView(view) else {
+        guard _cornerPosition(of: view) != nil else {
             return nil
         }
         return view

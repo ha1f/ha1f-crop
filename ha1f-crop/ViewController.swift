@@ -87,8 +87,9 @@ class ViewController: UIViewController {
     
     /// Set image to imageView, and resizes hole to fit properly in the screen
     func setImage(_ image: UIImage) {
+        scrollView.setZoomScale(1.0, animated: false)
         imageView.image = image
-        let preferredSize = imageView.sizeThatFits(croppingView.bounds.size)
+        let preferredSize = imageView.sizeThatFits(view.bounds.size)
         let preferredRect = CGRect(origin: .zero, size: preferredSize)
         let holeSize: CGSize
         if preferredRect.width > (croppingView.bounds.width - 50) {
@@ -124,7 +125,6 @@ class ViewController: UIViewController {
         if let croppedImage = image.cropped(to: scaledRect) {
             setImage(croppedImage)
         }
-        scrollView.setZoomScale(1.0, animated: false)
     }
 }
 
