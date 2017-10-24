@@ -66,21 +66,9 @@ class ViewController: UIViewController {
         view.addSubview(croppingView)
         scrollView.addSubview(imageView)
         
-        croppingView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            croppingView.topAnchor.constraint(equalTo: view.topAnchor),
-            croppingView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            croppingView.rightAnchor.constraint(equalTo: view.rightAnchor),
-            croppingView.leftAnchor.constraint(equalTo: view.leftAnchor)
-            ])
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        // TODO: re-layout
+        croppingView.frame = view.bounds
         scrollView.frame = view.bounds
-        NSLayoutConstraint.activate([
-            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            scrollView.rightAnchor.constraint(equalTo: view.rightAnchor),
-            scrollView.leftAnchor.constraint(equalTo: view.leftAnchor)
-            ])
         
         resetHole()
         
@@ -124,18 +112,13 @@ class ViewController: UIViewController {
         guard let image = imageView.image else {
             return
         }
-        print("actual", scrollView.actualFrame)
         let visibleRect = imageView.convert(scrollView.actualFrame.offsetBy(dx: scrollView.bounds.minX, dy: scrollView.bounds.minY), from: scrollView)
-        
-        print("visible", visibleRect)
-        print("inset", scrollView.contentInset)
         let actualImageViewWidth = imageView.frame.width / scrollView.zoomScale
         let scale: CGFloat = image.size.width / actualImageViewWidth
         let scaledRect = CGRect(x: visibleRect.minX * scale,
                                 y: visibleRect.minY * scale,
                                 width: visibleRect.width * scale,
                                 height: visibleRect.height * scale)
-        print("scaled", scaledRect)
         let croppedImage = image.cropped(to: scaledRect)
         imageView.image = croppedImage
         scrollView.setZoomScale(1.0, animated: false)
