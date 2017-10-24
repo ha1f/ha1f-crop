@@ -34,7 +34,7 @@ class ViewController: UIViewController {
     private lazy var imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
-        imageView.backgroundColor = .red
+        imageView.backgroundColor = .white
         return imageView
     }()
     
@@ -57,10 +57,12 @@ class ViewController: UIViewController {
         view.delegate = self
         return view
     }()
+    
+    var mask: UIImage? = #imageLiteral(resourceName: "mask.png")
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .black
+        view.backgroundColor = .white
         
         view.addSubview(scrollView)
         view.addSubview(croppingView)
@@ -72,6 +74,10 @@ class ViewController: UIViewController {
         
         setImage(#imageLiteral(resourceName: "sample.png"))
         
+        setupButton()
+    }
+    
+    private func setupButton() {
         let button = UIButton(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
         button.setTitle("CROP!", for: .normal)
         view.addSubview(button)
@@ -82,7 +88,13 @@ class ViewController: UIViewController {
             button.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor),
             button.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor)
             ])
-        button.addTarget(self, action: #selector(self.crop), for: .touchUpInside)
+        button.addTarget(self, action: #selector(self.onCropButtonTapped), for: .touchUpInside)
+    }
+    
+    @objc func onCropButtonTapped() {
+        if let result = crop() {
+            setImage(result)
+        }
     }
     
     /// Set image to imageView, and resizes hole to fit properly in the screen
@@ -111,9 +123,9 @@ class ViewController: UIViewController {
         scrollView.setZoomScale(scrollView.zoomScale, animated: false)
     }
     
-    @objc func crop() {
+    func crop() -> UIImage? {
         guard let image = imageView.image else {
-            return
+            return nil
         }
         let visibleRect = imageView.convert(scrollView.actualFrame.offsetBy(dx: scrollView.bounds.minX, dy: scrollView.bounds.minY), from: scrollView)
         let actualImageViewWidth = imageView.frame.width / scrollView.zoomScale
@@ -122,8 +134,13 @@ class ViewController: UIViewController {
                                 y: visibleRect.minY * scale,
                                 width: visibleRect.width * scale,
                                 height: visibleRect.height * scale)
-        if let croppedImage = image.cropped(to: scaledRect) {
-            setImage(croppedImage)
+        guard let croppedImage = image.cropped(to: scaledRect) else {
+            return nil
+        }
+        if let mask = mask {
+            return croppedImage.masked(with: mask)
+        } else {
+            return croppedImage
         }
     }
 }

@@ -24,6 +24,7 @@
 		563E4D0D1F9843EA000D33DC /* CornerPositionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 563E4D0C1F9843EA000D33DC /* CornerPositionTests.swift */; };
 		563E4D0F1F984788000D33DC /* CGVector+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 563E4D0E1F984788000D33DC /* CGVector+Extension.swift */; };
 		563E4D111F988FA4000D33DC /* UIImageView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 563E4D101F988FA4000D33DC /* UIImageView+Extension.swift */; };
+		56C980921F9F2D42007507AB /* mask.png in Resources */ = {isa = PBXBuildFile; fileRef = 56C980911F9F2D36007507AB /* mask.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,6 +59,7 @@
 		563E4D0C1F9843EA000D33DC /* CornerPositionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CornerPositionTests.swift; sourceTree = "<group>"; };
 		563E4D0E1F984788000D33DC /* CGVector+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGVector+Extension.swift"; sourceTree = "<group>"; };
 		563E4D101F988FA4000D33DC /* UIImageView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Extension.swift"; sourceTree = "<group>"; };
+		56C980911F9F2D36007507AB /* mask.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mask.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +101,7 @@
 		56275AF11F750F57005D9C3E /* ha1f-crop */ = {
 			isa = PBXGroup;
 			children = (
+				56C980911F9F2D36007507AB /* mask.png */,
 				56275B121F78A181005D9C3E /* sample.png */,
 				563E4D021F96F315000D33DC /* UIView+Extension.swift */,
 				56275B131F78A75E005D9C3E /* UIImage+Extension.swift */,
@@ -212,6 +215,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				56C980921F9F2D42007507AB /* mask.png in Resources */,
 				56275B151F78C81F005D9C3E /* sample.png in Resources */,
 				56275AFD1F750F57005D9C3E /* LaunchScreen.storyboard in Resources */,
 				56275AFA1F750F57005D9C3E /* Assets.xcassets in Resources */,

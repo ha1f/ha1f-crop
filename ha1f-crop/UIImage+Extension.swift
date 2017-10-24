@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import AVFoundation
 
 extension CGFloat {
     func degreesToRadians() -> CGFloat {
@@ -27,11 +26,9 @@ extension UIImage {
     
     /// https://stackoverflow.com/questions/40389215/swift-rotate-an-image-then-zoom-in-and-crop-to-keep-width-height-aspect-ratio
     func rotateAndCropped(degree: CGFloat) -> UIImage? {
-        guard let ciImage = self.ciImage else {
-            return nil
-        }
-        let rotated = ciImage.applyingFilter("CIStraightenFilter", parameters: [kCIInputAngleKey: degree.degreesToRadians()])
-        return UIImage(ciImage: rotated)
+        let ciImage = self.ciImage ?? CIImage(image: self)
+        let rotated = ciImage?.applyingFilter("CIStraightenFilter", parameters: [kCIInputAngleKey: degree.degreesToRadians()])
+        return rotated.map { UIImage(ciImage: $0) }
     }
     
     /// http://blogs.innovationm.com/image-croprotateresize-handling-in-ios/
@@ -74,22 +71,16 @@ extension UIImage {
                 return nil
         }
         
-        let mask = CGImage(
-            maskWidth: maskRef.width,
-            height: maskRef.height,
-            bitsPerComponent: maskRef.bitsPerComponent,
-            bitsPerPixel: maskRef.bitsPerPixel,
-            bytesPerRow: maskRef.bytesPerRow,
-            provider: dataProvider,
-            decode: nil,
-            shouldInterpolate: false)
-        
+        let mask = CGImage(maskWidth: maskRef.width,
+                           height: maskRef.height,
+                           bitsPerComponent: maskRef.bitsPerComponent,
+                           bitsPerPixel: maskRef.bitsPerPixel,
+                           bytesPerRow: maskRef.bytesPerRow,
+                           provider: dataProvider,
+                           decode: nil,
+                           shouldInterpolate: false)
         return mask
             .flatMap { ref.masking($0) }
             .map { UIImage(cgImage: $0) }
-    }
-    
-    func aspectFitRect(inside rect: CGRect) -> CGRect {
-        return AVMakeRect(aspectRatio: self.size, insideRect: rect)
     }
 }
